@@ -1,0 +1,18 @@
+{
+  "Name": "SpinningWeaponAndToolMod",
+  "Author": "Darkmushu1",
+  "Version": "1.0.0",
+  "Description": "Right Click use spinning attack on weapon and some tools",
+  "UniqueID": "Darkmushu1.SpinningWeaponAndToolMod",
+  "EntryDll": "SpinningWeaponAndToolMod.dll",
+  "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": ["Nexus:32586"],
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.GenericModConfigMenu",
+      "IsRequired": false
+    }
+  ]
+}
+
+
