@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using GenericModConfigMenu;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace SpinningWeaponAndToolMod
@@ -14,8 +15,21 @@ namespace SpinningWeaponAndToolMod
     public class ModConfig
     {
         public SButton SpinHotkey { get; set; } = SButton.MouseRight;
-        public SButton UnstuckAnimation { get; set; } = SButton.MouseLeft;
-        public float BaseStaminaDrain { get; set; } = 2.0f;
+        public SButton SpinHotkeyController { get; set; } = SButton.ControllerX;
+        public float BaseStaminaDrain { get; set; } = 3.0f;
+        public float reduceStaminaDrainForWeaponsPerLevel = 0.1f;
+        public float reduceStaminaDrainForAxePerLevel = 0.1f;
+        public float reduceStaminaDrainForPickaxePerLevel = 0.1f;
+        public int weaponSpinRadius { get; set; } = 2;
+        public float weaponSpinPercentDamage { get; set; } = 1.0f;
+        public int numberOfWeaponSpinHitsPerSecond { get; set; } = 3;
+        public int axeSpinRadius { get; set; } = 2;
+        public int numberOfAxeSpinHitsPerSecond { get; set; } = 2;
+        public int pickaxeSpinRadius { get; set; } = 2;
+        public int numberOfPickaxeSpinHitsPerSecond { get; set; } = 2;
+        public int numberOfSpinningSprite {   get; set; } = 5;
+
+        public string note { get; set; } = "Feel free add your weapon sprite or update existing one if you want custom mod sprites for weapons or tools to appear when using/tools the spin attack";
         public List<WeaponSpriteData> weaponSpriteData { get; set; } = new List<WeaponSpriteData>
         {
 
@@ -100,7 +114,6 @@ namespace SpinningWeaponAndToolMod
         };
     }
 
-
     public class WeaponSpriteData
     {
         public string ItemName { get; set; }
@@ -110,13 +123,15 @@ namespace SpinningWeaponAndToolMod
         
     }
   
-
     public class ModEntry : Mod
     {
         private bool startSpinAnimation = false;
         private int staminaDrainCounter = 0;
         private bool isSpinning = false;
-        private int spinTickCounter = 0;
+        private int SpinTickCounter = 0;
+        private int weaponSpinTickCounter = 0;
+        private int pickaxeSpinTickCounter = 0;
+        private int axeSpinTickCounter = 0;
         private int rotateTickCounter = 0;
         private int facingDirectionIndex = 0;
         private ModConfig Config;
@@ -132,24 +147,42 @@ namespace SpinningWeaponAndToolMod
 
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            if (!Context.IsWorldReady) return;
 
-            if (isSpinning && (e.Button == Config.UnstuckAnimation || e.Button.IsUseToolButton()))
-            {
-                StopSpinning();
-                Game1.player.UsingTool = false;
-                Game1.player.completelyStopAnimatingOrDoingAction();
-                Game1.player.CanMove = true;
+            //Return if world hasn't been loaded
+            if (!Context.IsWorldReady)
                 return;
-            }
+
+            // Return if any active menu is open
+            if (Game1.activeClickableMenu != null)
+                return;
+
+            // Return if a dialogue is open or message box is showing
+            if (Game1.dialogueUp || Game1.messagePause)
+                return;
+
+            // Return if a shop menu is open
+            if (Game1.activeClickableMenu is StardewValley.Menus.ShopMenu)
+                return;
+
+            // Return if player is in end-of-day menu (e.g. level up screen or summary)
+            if (Game1.currentLocation.currentEvent != null && Game1.currentLocation.currentEvent.isFestival)
+                return;
+
+
+            if (Game1.player.UsingTool || Game1.player.isInBed.Value || Game1.player.isEating)
+                return;
+
+
 
             Tool tool = Game1.player.CurrentTool;
 
-            if (e.Button == Config.SpinHotkey && tool is not null &&
+            if ((e.Button == Config.SpinHotkey|| e.Button == Config.SpinHotkeyController) && tool is not null &&
                 (tool is Pickaxe || tool is Axe || (tool is MeleeWeapon weapon )))
             {
                 isSpinning = true;
-                spinTickCounter = 0;
+                weaponSpinTickCounter = 0;
+                pickaxeSpinTickCounter = 0;
+                pickaxeSpinTickCounter = 0;
                 rotateTickCounter = 0;
                 facingDirectionIndex = 0;
 
@@ -162,7 +195,7 @@ namespace SpinningWeaponAndToolMod
         {
             if (!Context.IsWorldReady) return;
 
-            if (e.Button == Config.SpinHotkey && isSpinning)
+            if ((e.Button == Config.SpinHotkey || e.Button == Config.SpinHotkeyController) && isSpinning)
             {
                 StopSpinning();
             }
@@ -176,6 +209,10 @@ namespace SpinningWeaponAndToolMod
             Game1.player.completelyStopAnimatingOrDoingAction();
             Game1.player.UsingTool = false;
             Game1.player.CanMove = true;
+
+            weaponSpinTickCounter = 0;
+            pickaxeSpinTickCounter = 0;
+            axeSpinTickCounter = 0;
         }
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
@@ -183,6 +220,8 @@ namespace SpinningWeaponAndToolMod
 
             if (!Context.IsWorldReady || !isSpinning) return;
 
+
+            //checks for stamina if not enough won't spin or run any additiona code
             staminaDrainCounter++;
             if (staminaDrainCounter >= 6)
             {
@@ -191,62 +230,83 @@ namespace SpinningWeaponAndToolMod
 
                 if (Game1.player.Stamina < staminaCost)
                 {
-                    Monitor.Log("Not enough stamina to continue spinning.", LogLevel.Debug);
+                    //Monitor.Log("Not enough stamina to continue spinning.", LogLevel.Debug);
                     StopSpinning();
                     return;
                 }
 
-
-
             }
 
-            rotateTickCounter++;
-            if (rotateTickCounter >= 10)
+            
+
+
+
+            if (Game1.player.CurrentTool is Pickaxe)
             {
-                rotateTickCounter = 0;
-                Game1.player.faceDirection(facingDirectionIndex);
-                facingDirectionIndex = (facingDirectionIndex + 1) % 4;
+                pickaxeSpinTickCounter++;
+            }
+            if (Game1.player.CurrentTool is Axe)
+            {
+                axeSpinTickCounter++;
+            }
+            if (Game1.player.CurrentTool is MeleeWeapon)
+            {
+                weaponSpinTickCounter++;
             }
 
 
-
-            spinTickCounter++;
-            if (spinTickCounter >= 10)
+            if ((pickaxeSpinTickCounter >= (60 / Config.numberOfPickaxeSpinHitsPerSecond)) && !Game1.player.isEating)
             {
+                pickaxeSpinTickCounter = 0;
                 startSpinAnimation = true;
                 float startStamina = Game1.player.Stamina;
-                spinTickCounter = 0;
                 ApplySpinEffect();
                 Game1.player.Stamina = startStamina;
-                if (Game1.player.CurrentTool is Pickaxe)
-                {
-                    float playerMiningLevel = Game1.player.MiningLevel * 0.1f;
-                    Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerMiningLevel, 0.1f);
-                    Console.WriteLine( $"Mining level *.1: { playerMiningLevel} ");
-                }
-                else if ( Game1.player.CurrentTool is Axe)
-                {
-                    float playerForgageLevel = Game1.player.ForagingLevel * 0.1f;
-                    Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerForgageLevel, 0.1f);
-                    Console.WriteLine($"playerForgageLevel  *.1: {playerForgageLevel} ");
-                }
-                else if (Game1.player.CurrentItem is MeleeWeapon weapon && !weapon.isScythe())
-                {
-                    float playerCombatLevel = Game1.player.CombatLevel * 0.1f;
-                    Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerCombatLevel, 0.1f);
-                    Console.WriteLine($"playerCombatLevel  *.1: {playerCombatLevel} ");
-                }
+                float playerMiningLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForPickaxePerLevel;
+                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerMiningLevel, 0.1f);
                 
             }
+            if ((axeSpinTickCounter >= (60/ Config.numberOfAxeSpinHitsPerSecond)) && !Game1.player.isEating)
+             {
+                axeSpinTickCounter = 0;
+                startSpinAnimation = true;
+                float startStamina = Game1.player.Stamina;
+                ApplySpinEffect();
+                Game1.player.Stamina = startStamina;
+                float playerForgageLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForAxePerLevel;
+                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerForgageLevel, 0.1f);
+                //Console.WriteLine($"playerForgageLevel  *.1: {playerForgageLevel} ");
 
+            }
+            if ((weaponSpinTickCounter >= (60 / Config.numberOfWeaponSpinHitsPerSecond)) && !Game1.player.isEating)
+             {
+                weaponSpinTickCounter = 0;
+                startSpinAnimation = true;
+                float startStamina = Game1.player.Stamina;
+                ApplySpinEffect();
+
+                //drains weapon stamina only if weapon is not a scythe
+                if (!Game1.player.CurrentTool.isScythe())
+                {
+                    Game1.player.Stamina = startStamina;
+                    float playerCombatLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForWeaponsPerLevel;
+                    Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerCombatLevel, 0.1f);
+                    //Console.WriteLine($"playerCombatLevel  *.1: {playerCombatLevel} ");
+                }
+
+
+            }
 
             if (startSpinAnimation)
             {
+
                 ForceSpinAnimation(Game1.player.FacingDirection);
                 SpawnWindEffect();
             }
 
         }
+
+        
         private void ForceSpinAnimation(int facing)
         {
             int[] frames = facing switch
@@ -265,31 +325,29 @@ namespace SpinningWeaponAndToolMod
             Game1.player.FarmerSprite.setCurrentFrame(frames[current]);
         }
 
-
         private void ApplySpinEffect()
         {
             Tool tool = Game1.player.CurrentTool;
             if (tool == null) return;
 
             Vector2 center = Game1.player.Tile;
-            int radius = 5;
          
             switch (tool)
             {
                 case MeleeWeapon weapon:
                    
                     Game1.playSound("clubswipe");
-                    ApplyWeaponEffect(weapon, center, radius);
+                    ApplyWeaponEffect(weapon, center, Config.weaponSpinRadius);
                     break;
 
                 case Pickaxe pickaxe:
                     Game1.playSound("clubswipe");
-                    ApplyToolEffect(pickaxe, center, radius);
+                    ApplyToolEffect(pickaxe, center, Config.pickaxeSpinRadius);
                     break;
 
                 case Axe axe:
                     Game1.playSound("clubswipe");
-                    ApplyToolEffect(axe, center, radius);
+                    ApplyToolEffect(axe, center, Config.axeSpinRadius);
                     break;
             }
         }
@@ -336,7 +394,6 @@ namespace SpinningWeaponAndToolMod
             }
         }
 
-
         private void ApplyWeaponEffect(MeleeWeapon weapon, Vector2 center, int radius)
         {
             GameLocation location = Game1.currentLocation;
@@ -353,8 +410,8 @@ namespace SpinningWeaponAndToolMod
                     {
                         if (npc is Monster monster && monster.GetBoundingBox().Intersects(area))
                         {
-                            int min = weapon.minDamage.Value;
-                            int max = weapon.maxDamage.Value;
+                            int min = (int)(weapon.minDamage.Value * Config.weaponSpinPercentDamage);
+                            int max = (int)(weapon.maxDamage.Value * Config.weaponSpinPercentDamage);
                             int damage = random.Next(min, max + 1);
 
                             float critChance = weapon.critChance.Value;
@@ -412,39 +469,25 @@ namespace SpinningWeaponAndToolMod
 
         private void SpawnWindEffect()
         {
-
-
-            // Perfectly center the effect on the farmer's chest
             Vector2 playerCenter = Game1.player.Position + new Vector2(Game1.player.Sprite.SpriteWidth / 2, -32f);
-
-            float windScale = 5.0f;
-            int numSprites = 5;
+            int numSprites = Config.numberOfSpinningSprite;
             double rotationSpeed = -500;
             double baseRotation = Game1.ticks * rotationSpeed;
-            float windradius = 0f;
+
             Tool tool = Game1.player.CurrentTool;
+            TemporaryAnimatedSprite[] weaponEffect = new TemporaryAnimatedSprite[Config.weaponSpinRadius];
+            TemporaryAnimatedSprite[] axeEffect = new TemporaryAnimatedSprite[Config.axeSpinRadius];
+            TemporaryAnimatedSprite[] pickaxeEffect = new TemporaryAnimatedSprite[Config.pickaxeSpinRadius];
 
             for (int i = 0; i < numSprites; i++)
             {
                 double angle = baseRotation + (Math.PI * 2 * i / numSprites);
                 float orbitRadius = 48.0f;  //48
 
-                // Adjust orbit radius based on tool
-                if (tool is Axe or Pickaxe)
-                    orbitRadius = 300;   //64
-                else if (tool is MeleeWeapon weapon)
-                    orbitRadius = 300;  //48
 
                 float offsetX = (float)Math.Cos(angle) * orbitRadius;
                 float offsetY = (float)Math.Sin(angle) * orbitRadius;
                 Vector2 orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-
-                // Tool sprite
-                TemporaryAnimatedSprite effect1 = null;
-                TemporaryAnimatedSprite effect2 = null;
-                TemporaryAnimatedSprite effect3 = null;
-                TemporaryAnimatedSprite effect4 = null;
-                TemporaryAnimatedSprite effect5 = null;
 
                 if (tool is Pickaxe)
                 {
@@ -462,91 +505,34 @@ namespace SpinningWeaponAndToolMod
 
                     }
                     //Console.WriteLine($"pickaxeID: {pickaxeID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
-                    int pickaxeIndex = 62; // (col 2, row 5)
-                    effect1 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.6f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
+    
 
-                    orbitRadius = 250;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect2 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                    for (int j = 0; j < pickaxeEffect.Length; j++)
                     {
-                        rotation = (float)angle,
-                        alpha = 0.6f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
+                        orbitRadius = 100 + (50 * j);
+                        offsetX = (float)Math.Cos(angle) * orbitRadius;
+                        offsetY = (float)Math.Sin(angle) * orbitRadius;
+                        orbitPos = playerCenter + new Vector2(offsetX, offsetY);
+                        pickaxeEffect[j] = new TemporaryAnimatedSprite(
+                            tileSheet,
+                            sourceRect,
+                            100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                        {
+                            rotation = (float)angle,
+                            alpha = 0.6f,
+                            scale = 3.0f,
+                            motion = Vector2.Zero,
+                            layerDepth = 1f
+                        };
 
-                    orbitRadius = 200;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect3 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.6f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
 
-                    orbitRadius = 150;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect4 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.6f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
-
-                    orbitRadius = 100;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect5 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.6f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
-
-                    if (effect1 != null && effect2 != null && effect3 != null && effect4 != null && effect5 != null)
-                    {
-                        Game1.currentLocation.temporarySprites.Add(effect1);
-                        Game1.currentLocation.temporarySprites.Add(effect2);
-                        Game1.currentLocation.temporarySprites.Add(effect3);
-                        Game1.currentLocation.temporarySprites.Add(effect4);
-                        Game1.currentLocation.temporarySprites.Add(effect5);
+                        if (pickaxeEffect[j] != null)
+                        {
+                            Game1.currentLocation.temporarySprites.Add(pickaxeEffect[j]);
+                        }
+                        //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
                     }
+
                 }
                 else if (tool is Axe)
                 {
@@ -564,91 +550,36 @@ namespace SpinningWeaponAndToolMod
 
                     }
                     //Console.WriteLine($"axeID: {axeID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
-                    int axeIndex = 74; // (col 2, row 6)
-                    effect1 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
 
-                    orbitRadius = 250;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect2 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                    for (int j = 0; j < axeEffect.Length; j++)
                     {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
+                        orbitRadius = 100 + (50 * j);
+                        offsetX = (float)Math.Cos(angle) * orbitRadius;
+                        offsetY = (float)Math.Sin(angle) * orbitRadius;
+                        orbitPos = playerCenter + new Vector2(offsetX, offsetY);
+                        axeEffect[j] = new TemporaryAnimatedSprite(
+                            tileSheet,
+                            sourceRect,
+                            100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                        {
+                            rotation = (float)angle,
+                            alpha = 0.4f,
+                            scale = 3.0f,
+                            motion = Vector2.Zero,
+                            layerDepth = 1f
+                        };
 
-                    orbitRadius = 200;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect3 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
+                        if (axeEffect[j] != null)
+                        {
+                            Game1.currentLocation.temporarySprites.Add(axeEffect[j]);
+                        }
 
-                    orbitRadius = 150;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect4 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
-
-                    orbitRadius = 100;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect5 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect,
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
-
-                    if (effect1 != null && effect2 != null && effect3 != null && effect4 != null && effect5 != null)
-                    {
-                        Game1.currentLocation.temporarySprites.Add(effect1);
-                        Game1.currentLocation.temporarySprites.Add(effect2);
-                        Game1.currentLocation.temporarySprites.Add(effect3);
-                        Game1.currentLocation.temporarySprites.Add(effect4);
-                        Game1.currentLocation.temporarySprites.Add(effect5);
+                        //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
                     }
+
+
+
+
                 }
                 else if (tool is MeleeWeapon weapon)
                 {
@@ -664,92 +595,33 @@ namespace SpinningWeaponAndToolMod
                     {
                         tileSheet = match.tilesheetName;
                         sourceRect = match.SourceRect;
-
                     }
-                    //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
-                    effect1 = new TemporaryAnimatedSprite(
-                    tileSheet,
-                    sourceRect, // First sword sprite
-                    100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
 
-                    orbitRadius = 250;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect2 = new TemporaryAnimatedSprite(
+
+                    for (int j = 0; j < weaponEffect.Length; j++)
+                    {
+                        orbitRadius = 100 + (50*j);
+                        offsetX = (float)Math.Cos(angle) * orbitRadius;
+                        offsetY = (float)Math.Sin(angle) * orbitRadius;
+                        orbitPos = playerCenter + new Vector2(offsetX, offsetY);
+                        weaponEffect[j] = new TemporaryAnimatedSprite(
                         tileSheet,
                         sourceRect, // First sword sprite
                         100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
+                        {
+                            rotation = (float)angle,
+                            alpha = 0.4f,
+                            scale = 3.0f,
+                            motion = Vector2.Zero,
+                            layerDepth = 1f
+                        };
 
-                    orbitRadius = 200;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect3 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect, // First sword sprite
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
-
-                    orbitRadius = 150;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect4 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect, // First sword sprite
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
-                    orbitRadius = 100;
-                    offsetX = (float)Math.Cos(angle) * orbitRadius;
-                    offsetY = (float)Math.Sin(angle) * orbitRadius;
-                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                    effect5 = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect, // First sword sprite
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                    {
-                        rotation = (float)angle,
-                        alpha = 0.4f,
-                        scale = 3.0f,
-                        motion = Vector2.Zero,
-                        layerDepth = 1f
-                    };
-
-
-                    if (effect1 != null && effect2 != null && effect3 != null && effect4 != null && effect5 != null)
-                    {
-                        Game1.currentLocation.temporarySprites.Add(effect1);
-                        Game1.currentLocation.temporarySprites.Add(effect2);
-                        Game1.currentLocation.temporarySprites.Add(effect3);
-                        Game1.currentLocation.temporarySprites.Add(effect4);
-                        Game1.currentLocation.temporarySprites.Add(effect5);
+                        if (weaponEffect[j] != null)
+                        {
+                            Game1.currentLocation.temporarySprites.Add(weaponEffect[j]);
+                        }
+                            
+                        //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
                     }
 
 
@@ -761,8 +633,7 @@ namespace SpinningWeaponAndToolMod
         }
 
 
-
-            private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
 
             // Uses Generic Mod Config Menu API to build a config UI.
@@ -775,9 +646,33 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "When selecting a tool or weapon, rightclick {hotkey configurable} to spin, and leftclick{hotkey configurable} if spin gets stucks. You can set the base stamina drain. The stamina drain reduces by 0.1 cost per skill level. Example: level 10 combat will reduce stamina drain when using weapons by 1.0 "
+                text: () => "When selecting a tool or weapon, rightclick {hotkey configurable} to spin, and leftclick{hotkey configurable} if spin gets stucks. You can set the base stamina drain. The stamina drain reduces by 0.1 cost per skill level. Example: level 10 combat will reduce stamina drain when using weapons/tools"
             );
 
+            gmcm.AddParagraph(
+                ModManifest,
+                text: () => "------------------------Hotkeys Settings------------------------"
+            );
+            gmcm.AddKeybind(
+                ModManifest,
+                name: () => "Spin Hotkey",
+                tooltip: () => "Hold a weapon or tool and press this hotkey to use the spinning skill",
+                getValue: () => Config.SpinHotkey,
+                setValue: value => Config.SpinHotkey = value
+            );
+
+            gmcm.AddKeybind(
+                ModManifest,
+                name: () => "Spin Hotkey Controller",
+                tooltip: () => "Spin Hotkey for controller, holding this will spin with weapon or tool",
+                getValue: () => Config.SpinHotkeyController,
+                setValue: value => Config.SpinHotkeyController = value
+            );
+
+            gmcm.AddParagraph(
+                ModManifest,
+                text: () => "------------------------Weapon+Tool Settings------------------------"
+            );
 
             gmcm.AddNumberOption(
                 mod: ModManifest,
@@ -790,23 +685,152 @@ namespace SpinningWeaponAndToolMod
                 interval: 0.1f
             );
 
-
-            gmcm.AddKeybind(
-                ModManifest,
-                name: () => "Spin Hotkey",
-                tooltip: () => "Hold a weapon or tool and press this hotkey to use the spinning skill",
-                getValue: () => Config.SpinHotkey,
-                setValue: value => Config.SpinHotkey = value
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.numberOfSpinningSprite,
+                setValue: value => Config.numberOfSpinningSprite = value,
+                name: () => "Number of Spinning Sprite",
+                tooltip: () => "Lower for better performance, higher for better quality, default = 5",
+                min: 3,
+                max: 20,
+                interval: 1
             );
 
-            gmcm.AddKeybind(
+
+
+            gmcm.AddParagraph(
                 ModManifest,
-                name: () => "Unstuck frozen animation",
-                tooltip: () => "Sometimes when spinning and then performming other animations, character could sometimes get stuck, this hotkey will unstuck the animation",
-                getValue: () => Config.UnstuckAnimation,
-                setValue: value => Config.UnstuckAnimation = value
+                text: () => "------------------------Weapon Settings------------------------"
             );
-      
+
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.reduceStaminaDrainForWeaponsPerLevel,
+                setValue: value => Config.reduceStaminaDrainForWeaponsPerLevel = value,
+                name: () => "Reduce Stamina Drain Per Level",
+                tooltip: () => "Reduce Stamina Drain when using spinning weapons by this amount per Combat Skill level",
+                min: 0.00f,
+                max: 1.0f,
+                interval: 0.01f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.weaponSpinRadius,
+                setValue: value => Config.weaponSpinRadius = value,
+                name: () => "Weapon Max Spin Radius",
+                tooltip: () => "Set Weapon Max Spin Radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.weaponSpinPercentDamage,
+                setValue: value => Config.weaponSpinPercentDamage = value,
+                name: () => "Weapon Spin Percent Damage",
+                tooltip: () => "Set to apply a percent of the weapon's base damage. Example if set to .50 only deals 50% of weapon damage per spin",
+                min: 0.01f,
+                max: 1.0f,
+                interval: 0.01f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.numberOfWeaponSpinHitsPerSecond,
+                setValue: value => Config.numberOfWeaponSpinHitsPerSecond = value,
+                name: () => "Weapon Spin Hit Per Sec",
+                tooltip: () => "Number of times Spin attack hits monster per second",
+                min: 1,
+                max: 60,
+                interval: 1
+            );
+
+
+            gmcm.AddParagraph(
+                ModManifest,
+                text: () => "------------------------Pickaxe Settings------------------------"
+            );
+
+
+
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.reduceStaminaDrainForPickaxePerLevel,
+                setValue: value => Config.reduceStaminaDrainForPickaxePerLevel = value,
+                name: () => "Reduce Stamina Drain Per Level",
+                tooltip: () => "Reduce Stamina Drain when using spinning pickaxe by this amount per minning Skill level",
+                min: 0.00f,
+                max: 1.0f,
+                interval: 0.01f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.pickaxeSpinRadius,
+                setValue: value => Config.pickaxeSpinRadius = value,
+                name: () => "Pickaxe Max Spin Radius",
+                tooltip: () => "Set Pickaxe Max Spin Radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.numberOfPickaxeSpinHitsPerSecond,
+                setValue: value => Config.numberOfPickaxeSpinHitsPerSecond = value,
+                name: () => "Pickaxe Spin Hit Per Sec",
+                tooltip: () => "Number of times pickaxe spin attack hits area per second",
+                min: 1,
+                max: 60,
+                interval: 1
+            );
+
+
+            gmcm.AddParagraph(
+                ModManifest,
+                text: () => "------------------------Axe Settings------------------------"
+            );
+
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.reduceStaminaDrainForAxePerLevel,
+                setValue: value => Config.reduceStaminaDrainForAxePerLevel = value,
+                name: () => "Reduce Stamina Drain Per Level",
+                tooltip: () => "Reduce Stamina Drain when using spinning axe by this amount per Foraging Skill level",
+                min: 0.00f,
+                max: 1.0f,
+                interval: 0.01f
+            );
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.axeSpinRadius,
+                setValue: value => Config.axeSpinRadius = value,
+                name: () => "Set Axe Max Spin Radius",
+                tooltip: () => "Set Axe Max Spin Radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.numberOfAxeSpinHitsPerSecond,
+                setValue: value => Config.numberOfAxeSpinHitsPerSecond = value,
+                name: () => "Axe Spin Hit Per Sec",
+                tooltip: () => "Number of times axe spin attack hits area per second",
+                min: 1,
+                max: 60,
+                interval: 1
+            );
+
+
+
 
 
 
