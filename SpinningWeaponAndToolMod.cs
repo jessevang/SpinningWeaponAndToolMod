@@ -15,12 +15,16 @@ namespace SpinningWeaponAndToolMod
 {
     public class ModConfig
     {
+        //hotkeys
         public SButton SpinHotkey { get; set; } = SButton.MouseRight;
         public SButton SpinHotkeyController { get; set; } = SButton.ControllerX;
+        
+        //all tool and weapons
         public float BaseStaminaDrain { get; set; } = 3.0f;
-        public float reduceStaminaDrainForWeaponsPerLevel = 0.1f;
-        public float reduceStaminaDrainForAxePerLevel = 0.1f;
-        public float reduceStaminaDrainForPickaxePerLevel = 0.1f;
+        public float reduceStaminaDrainForWeaponsPerLevel { get; set; } = 0.1f;
+        public int numberOfSpinningSprite { get; set; } = 5;
+
+        //weapons
         public int weaponSpinRadius { get; set; } = 3;
         public int swordSpinRadius { get; set; } = 2;
         public int daggerSpinRadius { get; set; } = 1;
@@ -31,17 +35,44 @@ namespace SpinningWeaponAndToolMod
         public int numberOfSwordSpinHitsPerSecond { get; set; } = 4;
         public int numberOfDaggerSpinHitsPerSecond { get; set; } = 5;
         public int numberOfHammerSpinHitsPerSecond { get; set; } = 3;
+        
+        //axe
         public int axeSpinRadius { get; set; } = 1;
         public float axeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
-        public int numberOfAxeSpinHitsPerSecond { get; set; } = 3; 
+        public int numberOfAxeSpinHitsPerSecond { get; set; } = 3;
+        public float axeEnchantEfficient { get; set; } = 1f;
+        public int axeEnchantSwift { get; set; } = 1;
+        public float reduceStaminaDrainForAxePerLevel { get; set; } = 0.1f;
+
+        //pickaxe
         public int pickaxeSpinRadius { get; set; } = 1;
-        public int axeEnchantSwift {  get; set; } = 1;  
         public int pickaxeEnchantSwift { get; set; } = 1; 
-        public float axeEnchantEfficient {  get; set; } = 1f; 
         public float pickaxeEnchantEfficient { get; set; } = 1f; 
         public float pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
         public int numberOfPickaxeSpinHitsPerSecond { get; set; } = 3;
-        public int numberOfSpinningSprite {get; set; } = 5;
+        public float reduceStaminaDrainForPickaxePerLevel { get; set; } = 0.1f;
+
+
+        //watering can
+        public float reduceStaminaDrainForWateringCanPerLevel { get; set; } = 0.1f;
+
+        public float wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public int wateringcanRadius { get; set; } = 1;
+        public float wateringcanEnchantEfficient { get; set; } = 1f;
+        public float wateringcanEnchantReaching { get; set; } = 1f;
+
+
+        //Hoe
+        public float reduceStaminaDrainForHoePerLevel { get; set; } = 0.1f;
+        public int numberOfHoeSpinHitsPerSecond { get; set; } = 3;
+        public float HoeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public int HoeRadius { get; set; } = 1;
+        public float HoeEnchantSwift{ get; set; } = 1f;
+        public float HoeEnchantEfficient { get; set; } = 1f;
+        public float HoeEnchantReaching { get; set; } = 1f;
+
+
+
 
         public string note { get; set; } = "Feel free add your weapon sprite or update existing one if you want custom mod sprites for weapons or tools to appear when using/tools the spin attack";
         public List<WeaponSpriteData> weaponSpriteData { get; set; } = new List<WeaponSpriteData>
@@ -124,6 +155,27 @@ namespace SpinningWeaponAndToolMod
             new WeaponSpriteData{ItemName= "Steel Pickaxe", itemCategoryAndItemID = "(T)SteelPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,96,16,32)},
             new WeaponSpriteData{ItemName= "Gold Pickaxe", itemCategoryAndItemID = "(T)GoldPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,128,16,32)},
             new WeaponSpriteData{ItemName= "Iridium Pickaxe", itemCategoryAndItemID = "(T)IridiumPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,128,16,32)},
+            new WeaponSpriteData{ItemName= "Rusty Sword", itemCategoryAndItemID = "(W)0", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0, 0, 16, 16)},
+            new WeaponSpriteData{ItemName= "Axe", itemCategoryAndItemID = "(T)Axe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,160,16,32)},
+            new WeaponSpriteData{ItemName= "Copper Axe", itemCategoryAndItemID = "(T)CopperAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,160,16,32)},
+            new WeaponSpriteData{ItemName= "Steel Axe", itemCategoryAndItemID = "(T)SteelAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,160,16,32)},
+            new WeaponSpriteData{ItemName= "Gold Axe", itemCategoryAndItemID = "(T)GoldAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,192,16,32)},
+            new WeaponSpriteData{ItemName= "Iridium Axe", itemCategoryAndItemID = "(T)IridiumAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,192,16,32)},
+            new WeaponSpriteData{ItemName= "Pickaxe", itemCategoryAndItemID = "(T)Pickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,96,16,32)},
+            new WeaponSpriteData{ItemName= "Copper Pickaxe", itemCategoryAndItemID = "(T)CopperPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,96,16,32)},
+            new WeaponSpriteData{ItemName= "Steel Pickaxe", itemCategoryAndItemID = "(T)SteelPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,96,16,32)},
+            new WeaponSpriteData{ItemName= "Gold Pickaxe", itemCategoryAndItemID = "(T)GoldPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,128,16,32)},
+            new WeaponSpriteData{ItemName= "Iridium Pickaxe", itemCategoryAndItemID = "(T)IridiumPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,128,16,32)},
+            new WeaponSpriteData{ItemName= "Watering Can", itemCategoryAndItemID = "(T)WateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(48,224,16,32)},
+            new WeaponSpriteData{ItemName= "Copper Watering Can", itemCategoryAndItemID = "(T)CopperWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(160,224,16,32)},
+            new WeaponSpriteData{ItemName= "Steel Watering Can", itemCategoryAndItemID = "(T)SteelWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(272,224,16,32)},
+            new WeaponSpriteData{ItemName= "Gold Watering Can", itemCategoryAndItemID = "(T)GoldWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(48,256,16,32)},
+            new WeaponSpriteData{ItemName= "Iridium Watering Can", itemCategoryAndItemID = "(T)IridiumWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(160,256,16,32)},
+            new WeaponSpriteData{ItemName= "Hoe", itemCategoryAndItemID = "(T)Hoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,32,16,32)},
+            new WeaponSpriteData{ItemName= "Copper Hoe", itemCategoryAndItemID = "(T)CopperHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,32,16,32)},
+            new WeaponSpriteData{ItemName= "Steel Hoe", itemCategoryAndItemID = "(T)SteelHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,32,16,32)},
+            new WeaponSpriteData{ItemName= "Gold Hoe", itemCategoryAndItemID = "(T)GoldHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,64,16,32)},
+            new WeaponSpriteData{ItemName= "Iridium Hoe", itemCategoryAndItemID = "(T)IridiumHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,64,16,32)}
 
         };
     }
@@ -146,6 +198,8 @@ namespace SpinningWeaponAndToolMod
         private int weaponSpinTickCounter = 0;
         private int pickaxeSpinTickCounter = 0;
         private int axeSpinTickCounter = 0;
+        private int wateringcanSpinTickCounter = 0;
+        private int hoeSpinTickCounter = 0;
         private int rotateTickCounter = 0;
         private int facingDirectionIndex = 0;
         private ModConfig Config;
@@ -172,14 +226,16 @@ namespace SpinningWeaponAndToolMod
             Tool tool = Game1.player.CurrentTool;
 
             if ((e.Button == Config.SpinHotkey|| e.Button == Config.SpinHotkeyController) && tool is not null &&
-                (tool is Pickaxe || tool is Axe || (tool is MeleeWeapon weapon )))
+                (tool is Pickaxe || tool is Axe || tool is WateringCan || tool is Hoe || (tool is MeleeWeapon weapon)))
             {
                 isSpinning = true;
                 weaponSpinTickCounter = 0;
-                pickaxeSpinTickCounter = 0;
+                axeSpinTickCounter = 0;
                 pickaxeSpinTickCounter = 0;
                 rotateTickCounter = 0;
                 facingDirectionIndex = 0;
+                wateringcanSpinTickCounter = 0;
+                hoeSpinTickCounter = 0;
 
                 Game1.player.UsingTool = false;
                 Game1.player.completelyStopAnimatingOrDoingAction();
@@ -208,6 +264,8 @@ namespace SpinningWeaponAndToolMod
             weaponSpinTickCounter = 0;
             pickaxeSpinTickCounter = 0;
             axeSpinTickCounter = 0;
+            wateringcanSpinTickCounter = 0;
+            hoeSpinTickCounter = 0;
         }
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
@@ -268,6 +326,71 @@ namespace SpinningWeaponAndToolMod
             {
                 weaponSpinTickCounter++;
             }
+            if (Game1.player.CurrentTool is WateringCan)
+            {
+                wateringcanSpinTickCounter++;
+                
+            }
+            if (Game1.player.CurrentTool is Hoe)
+            {
+                hoeSpinTickCounter++;
+            }
+
+
+
+            int maxWateringCanSpinTickCounter = 0;
+            maxWateringCanSpinTickCounter = (60 / 3);
+
+            if (wateringcanSpinTickCounter >= maxWateringCanSpinTickCounter && Game1.player.CurrentTool is WateringCan wateringCan)
+            {
+                int waterLeft = wateringCan.WaterLeft;
+                
+                wateringcanSpinTickCounter = 0;
+                startSpinAnimation = true;
+                float startStamina = Game1.player.Stamina;
+                ApplySpinEffect();
+                Game1.player.Stamina = startStamina;
+                float playerfarmingLevel = Game1.player.FarmingLevel * Config.reduceStaminaDrainForWateringCanPerLevel;
+                wateringCan.WaterLeft = waterLeft - 1;
+                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
+                {
+                    playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForWateringCanPerLevel) + Config.wateringcanEnchantEfficient;
+                }
+                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel, 0.1f);
+            }
+
+
+
+
+            int maxhoeSpinTickCounter = 0;
+            if (Game1.player.CurrentTool is Hoe tempHoe && tempHoe.hasEnchantmentOfType<SwiftToolEnchantment>())
+            {
+                maxhoeSpinTickCounter = (int)(60 / (Config.numberOfHoeSpinHitsPerSecond + Config.HoeEnchantSwift));
+            }
+            else
+            {
+                maxhoeSpinTickCounter = (60 / Config.numberOfHoeSpinHitsPerSecond);
+            }
+
+            if (hoeSpinTickCounter >= maxhoeSpinTickCounter)
+            {
+
+
+                hoeSpinTickCounter = 0;
+                startSpinAnimation = true;
+                float startStamina = Game1.player.Stamina;
+                ApplySpinEffect();
+                Game1.player.Stamina = startStamina;
+                float playerfarmingLevel = Game1.player.FarmingLevel * Config.reduceStaminaDrainForHoePerLevel;
+                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
+                {
+                    playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForHoePerLevel) + Config.HoeEnchantEfficient;
+                }
+                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel, 0.1f);
+
+            }
+
+
 
 
 
@@ -422,6 +545,18 @@ namespace SpinningWeaponAndToolMod
                     SpawnToolEffect(axe, (int)(Config.axeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel));
                   
                     break;
+
+                case WateringCan wateringcan:
+
+                    SpawnToolEffect(wateringcan, (int)(Config.wateringcanRadius + Game1.player.CurrentTool.UpgradeLevel * Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel));
+
+                    break;
+                
+                case Hoe hoe:
+
+                    SpawnToolEffect(hoe, (int)(Config.HoeRadius + Game1.player.CurrentTool.UpgradeLevel * Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel));
+
+                    break;
             }
         }
 
@@ -475,6 +610,18 @@ namespace SpinningWeaponAndToolMod
                    
                     ApplyToolEffect(axe, center, (int)(Config.axeSpinRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel)));
                     break;
+
+                case WateringCan wateringcan:
+                    Game1.playSound("wateringCan");
+
+                    ApplyToolEffect(wateringcan, center, (int)(Config.wateringcanRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel)));
+                    break;
+
+                case Hoe hoe:
+                    Game1.playSound("hoeHit");
+
+                    ApplyToolEffect(hoe, center, (int)(Config.HoeRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel)));
+                    break;
             }
         }
 
@@ -482,35 +629,47 @@ namespace SpinningWeaponAndToolMod
         {
             GameLocation location = Game1.currentLocation;
             int power = Game1.player.CurrentTool.GetToolData().UpgradeLevel;
-            Game1.player.CurrentTool.swingTicker = Game1.random.Next(999999);  //needs to reset in order to hit resource clump 2nd time
+            Game1.player.CurrentTool.swingTicker = Game1.random.Next(999999); // needed for resource clumps
+
             for (int x = -radius; x <= radius; x++)
             {
                 for (int y = -radius; y <= radius; y++)
                 {
-
                     Vector2 tile = new(center.X + x, center.Y + y);
-                    int pixelX = (int)tile.X * 64;
-                    int pixelY = (int)tile.Y * 64;
-                    Vector2 hitPosition = new(pixelX, pixelY);
+                    int pixelX = (int)tile.X * Game1.tileSize;
+                    int pixelY = (int)tile.Y * Game1.tileSize;
 
-                    Game1.player.lastClick = hitPosition;
-
+                    Game1.player.lastClick = tile; // set to tile, not pixel position
+                   
                     Game1.player.UsingTool = true;
 
-                    // Hit terrain debris (rocks, twigs, etc.)
-                    tool.DoFunction(location, pixelX, pixelY, power, Game1.player);
 
-                    // Hit large resource clumps (like boulders, stumps)
-                    if (location.resourceClumps != null)
+                    if (tool is WateringCan wateringCan)
                     {
-                        foreach (var clump in location.resourceClumps)
+                        wateringCan.upgradeLevel.Set(0);
+                        tool.DoFunction(location, pixelX, pixelY, 0, Game1.player);
+                        wateringCan.upgradeLevel.Set(power);
+                    }
+                    if (tool is Hoe hoe)
+                    {
+                        hoe.upgradeLevel.Set(0);
+                        tool.DoFunction(location, pixelX, pixelY, 0, Game1.player);
+                        hoe.upgradeLevel.Set(power);
+                    }
+                    else if (tool is Axe || tool is Pickaxe)
+                    {
+                        tool.DoFunction(location, pixelX, pixelY, power, Game1.player);
+
+                        // Resource clumps
+                        if (location.resourceClumps != null)
                         {
-                            if (clump.getBoundingBox().Contains(pixelX + 32, pixelY + 32))
+                            foreach (var clump in location.resourceClumps)
                             {
-
-                                clump.performToolAction(tool, power, tile);
-
-                                break;
+                                if (clump.getBoundingBox().Contains(pixelX + 32, pixelY + 32))
+                                {
+                                    clump.performToolAction(tool, power, tile);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -519,6 +678,7 @@ namespace SpinningWeaponAndToolMod
                 }
             }
         }
+
 
         private void ApplyWeaponEffect(MeleeWeapon weapon, Vector2 center, int radius)
         {
@@ -565,29 +725,28 @@ namespace SpinningWeaponAndToolMod
                         }
                     }
 
-                    if (location.terrainFeatures.TryGetValue(tile, out var feature))
-                    {
-                        if (feature is Grass)
-                        {
-                            
-                            location.terrainFeatures.Remove(tile);
-                            Game1.playSound("cut");
-                            //Game1.createObjectDebris("0", (int)tile.X, (int)tile.Y, Game1.player.UniqueMultiplayerID);
-                        }
-                    }
 
 
-
+                    // Cut weeds (objects)
                     if (location.objects.TryGetValue(tile, out var obj))
                     {
                         if (obj.IsWeeds())
                         {
-                            obj.performRemoveAction();
+                            obj.performToolAction(weapon);
                             location.objects.Remove(tile);
                             Game1.playSound("cut");
                             Game1.createObjectDebris("771", (int)tile.X, (int)tile.Y, Game1.player.UniqueMultiplayerID);
                         }
+                    }
 
+                    // Cut tall grass (terrain features)
+                    if (location.terrainFeatures.TryGetValue(tile, out var feature) && feature is Grass grass)
+                    {
+                        if (grass.reduceBy(1, true))
+                        {
+                            location.terrainFeatures.Remove(tile);
+                        }
+                        Game1.playSound("cut");
                     }
                 }
             }
@@ -674,6 +833,8 @@ namespace SpinningWeaponAndToolMod
 
             TemporaryAnimatedSprite[] axeEffect = new TemporaryAnimatedSprite[radius];
             TemporaryAnimatedSprite[] pickaxeEffect = new TemporaryAnimatedSprite[radius];
+            TemporaryAnimatedSprite[] wateringcanEffect = new TemporaryAnimatedSprite[radius];
+            TemporaryAnimatedSprite[] hoeEffect = new TemporaryAnimatedSprite[radius];
 
 
             for (int i = 0; i < numSprites; i++)
@@ -769,6 +930,96 @@ namespace SpinningWeaponAndToolMod
                         if (axeEffect[j] != null)
                         {
                             Game1.currentLocation.temporarySprites.Add(axeEffect[j]);
+                        }
+
+                        //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
+                    }
+
+
+                }
+                else if (tool is WateringCan)
+                {
+                    string wateringcanID = Game1.player.CurrentItem.GetItemTypeId() + Game1.player.CurrentItem.ItemId;
+                    WeaponSpriteData match = Config.weaponSpriteData
+                        .FirstOrDefault(w => w.itemCategoryAndItemID == wateringcanID);
+
+                    string tileSheet = "TileSheets\\tools";
+                    Rectangle sourceRect = new Rectangle(48, 224, 16, 32);
+
+                    if (match != null)
+                    {
+                        tileSheet = match.tilesheetName;
+                        sourceRect = match.SourceRect;
+
+                    }
+                    //Console.WriteLine($"axeID: {axeID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
+
+                    for (int j = 0; j < wateringcanEffect.Length; j++)
+                    {
+                        orbitRadius = 100 + (50 * j);
+                        offsetX = (float)Math.Cos(angle) * orbitRadius;
+                        offsetY = (float)Math.Sin(angle) * orbitRadius;
+                        orbitPos = playerCenter + new Vector2(offsetX, offsetY);
+                        wateringcanEffect[j] = new TemporaryAnimatedSprite(
+                            tileSheet,
+                            sourceRect,
+                            100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                        {
+                            rotation = (float)angle,
+                            alpha = 0.4f,
+                            scale = 3.0f,
+                            motion = Vector2.Zero,
+                            layerDepth = 1f
+                        };
+
+                        if (wateringcanEffect[j] != null)
+                        {
+                            Game1.currentLocation.temporarySprites.Add(wateringcanEffect[j]);
+                        }
+
+                        //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
+                    }
+
+
+                }
+                else if (tool is Hoe)
+                {
+                    string HoeID = Game1.player.CurrentItem.GetItemTypeId() + Game1.player.CurrentItem.ItemId;
+                    WeaponSpriteData match = Config.weaponSpriteData
+                        .FirstOrDefault(w => w.itemCategoryAndItemID == HoeID);
+
+                    string tileSheet = "TileSheets\\tools";
+                    Rectangle sourceRect = new Rectangle(192, 32, 16, 32);
+
+                    if (match != null)
+                    {
+                        tileSheet = match.tilesheetName;
+                        sourceRect = match.SourceRect;
+
+                    }
+                    //Console.WriteLine($"axeID: {axeID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
+
+                    for (int j = 0; j < hoeEffect.Length; j++)
+                    {
+                        orbitRadius = 100 + (50 * j);
+                        offsetX = (float)Math.Cos(angle) * orbitRadius;
+                        offsetY = (float)Math.Sin(angle) * orbitRadius;
+                        orbitPos = playerCenter + new Vector2(offsetX, offsetY);
+                        hoeEffect[j] = new TemporaryAnimatedSprite(
+                            tileSheet,
+                            sourceRect,
+                            100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                        {
+                            rotation = (float)angle,
+                            alpha = 0.4f,
+                            scale = 3.0f,
+                            motion = Vector2.Zero,
+                            layerDepth = 1f
+                        };
+
+                        if (hoeEffect[j] != null)
+                        {
+                            Game1.currentLocation.temporarySprites.Add(hoeEffect[j]);
                         }
 
                         //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
@@ -1055,6 +1306,134 @@ namespace SpinningWeaponAndToolMod
             );
 
 
+            gmcm.AddParagraph(
+                ModManifest,
+                text: () => "------------------------Watering Can Settings------------------------"
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.wateringcanRadius,
+                setValue: value => Config.wateringcanRadius = value,
+                name: () => "Watering Can Base Radius",
+                tooltip: () => "Set base watering can radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel,
+                setValue: value => Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel = value,
+                name: () => " Radius per Tool Upgrade",
+                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additiona radius unless 2 tool upgrade is done. Upgrade tool levels are Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4 and does not limit here if other mod adds higher tool level",
+                min: 1.0f,
+                max: 2.0f,
+                interval: 0.1f
+            );
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.reduceStaminaDrainForWateringCanPerLevel,
+                setValue: value => Config.reduceStaminaDrainForWateringCanPerLevel = value,
+                name: () => "Reduced Stamina Cost Per Level",
+                tooltip: () => "Reduce stamina cost per level by this amount",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.wateringcanEnchantReaching,
+                setValue: value => Config.wateringcanEnchantReaching = value,
+                name: () => "Enchant: Reaching -Add Radius",
+                tooltip: () => "Increase tool radius by this amount if tool has the enchant reaching",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.wateringcanEnchantEfficient,
+                setValue: value => Config.wateringcanEnchantEfficient = value,
+                name: () => "Enchant:Efficient reduce Stamina Cost",
+                tooltip: () => "Reduce stamina cost by this amount if tool has the enchant Efficient",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+            gmcm.AddParagraph(
+                ModManifest,
+                text: () => "------------------------Hoe Settings------------------------"
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.HoeRadius,
+                setValue: value => Config.HoeRadius = value,
+                name: () => "Hoe Base Radius",
+                tooltip: () => "Set base Hoe radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel,
+                setValue: value => Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel = value,
+                name: () => "Radius per Tool Upgrade",
+                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additiona radius unless 2 tool upgrade is done. Upgrade tool levels are Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4 and does not limit here if other mod adds higher tool level",
+                min: 1.0f,
+                max: 2.0f,
+                interval: 0.1f
+            );
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.reduceStaminaDrainForHoePerLevel,
+                setValue: value => Config.reduceStaminaDrainForHoePerLevel = value,
+                name: () => "Reduced Stamina Cost Per Level",
+                tooltip: () => "Reduce stamina cost per level by this amount",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.HoeEnchantReaching,
+                setValue: value => Config.HoeEnchantReaching = value,
+                name: () => "Enchant: Reaching -Add Radius",
+                tooltip: () => "Increase tool radius by this amount if tool has the enchant reaching",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.HoeEnchantEfficient,
+                setValue: value => Config.HoeEnchantEfficient = value,
+                name: () => "Enchant:Efficient reduce Stamina Cost",
+                tooltip: () => "Reduce stamina cost by this amount if tool has the enchant Efficient",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.HoeEnchantSwift,
+                setValue: value => Config.HoeEnchantSwift = value,
+                name: () => "Enchant:Swift more hits",
+                tooltip: () => "tool hits hits more times per second if tool has the swift enchant",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
 
 
 
