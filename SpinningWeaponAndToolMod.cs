@@ -8,6 +8,7 @@ using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using GenericModConfigMenu;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley.Enchantments;
 
 
 namespace SpinningWeaponAndToolMod
@@ -20,14 +21,27 @@ namespace SpinningWeaponAndToolMod
         public float reduceStaminaDrainForWeaponsPerLevel = 0.1f;
         public float reduceStaminaDrainForAxePerLevel = 0.1f;
         public float reduceStaminaDrainForPickaxePerLevel = 0.1f;
-        public int weaponSpinRadius { get; set; } = 2;
-        public float weaponSpinPercentDamage { get; set; } = 1.0f;
+        public int weaponSpinRadius { get; set; } = 3;
+        public int swordSpinRadius { get; set; } = 2;
+        public int daggerSpinRadius { get; set; } = 1;
+        public int hammerSpinRadius {  get; set; } = 3;
+        public float weaponSpinRadiusPerCombatLevel { get; set; } = 0.2f;
+        public float allWeaponSpinPercentDamage { get; set; } = 1.0f;
         public int numberOfWeaponSpinHitsPerSecond { get; set; } = 3;
-        public int axeSpinRadius { get; set; } = 2;
-        public int numberOfAxeSpinHitsPerSecond { get; set; } = 2;
-        public int pickaxeSpinRadius { get; set; } = 2;
-        public int numberOfPickaxeSpinHitsPerSecond { get; set; } = 2;
-        public int numberOfSpinningSprite {   get; set; } = 5;
+        public int numberOfSwordSpinHitsPerSecond { get; set; } = 4;
+        public int numberOfDaggerSpinHitsPerSecond { get; set; } = 5;
+        public int numberOfHammerSpinHitsPerSecond { get; set; } = 3;
+        public int axeSpinRadius { get; set; } = 1;
+        public float axeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public int numberOfAxeSpinHitsPerSecond { get; set; } = 3; 
+        public int pickaxeSpinRadius { get; set; } = 1;
+        public int axeEnchantSwift {  get; set; } = 1;  
+        public int pickaxeEnchantSwift { get; set; } = 1; 
+        public float axeEnchantEfficient {  get; set; } = 1f; 
+        public float pickaxeEnchantEfficient { get; set; } = 1f; 
+        public float pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public int numberOfPickaxeSpinHitsPerSecond { get; set; } = 3;
+        public int numberOfSpinningSprite {get; set; } = 5;
 
         public string note { get; set; } = "Feel free add your weapon sprite or update existing one if you want custom mod sprites for weapons or tools to appear when using/tools the spin attack";
         public List<WeaponSpriteData> weaponSpriteData { get; set; } = new List<WeaponSpriteData>
@@ -152,25 +166,6 @@ namespace SpinningWeaponAndToolMod
             if (!Context.IsWorldReady)
                 return;
 
-            // Return if any active menu is open
-            if (Game1.activeClickableMenu != null)
-                return;
-
-            // Return if a dialogue is open or message box is showing
-            if (Game1.dialogueUp || Game1.messagePause)
-                return;
-
-            // Return if a shop menu is open
-            if (Game1.activeClickableMenu is StardewValley.Menus.ShopMenu)
-                return;
-
-            // Return if player is in end-of-day menu (e.g. level up screen or summary)
-            if (Game1.currentLocation.currentEvent != null && Game1.currentLocation.currentEvent.isFestival)
-                return;
-
-
-            if (Game1.player.UsingTool || Game1.player.isInBed.Value || Game1.player.isEating)
-                return;
 
 
 
@@ -221,6 +216,26 @@ namespace SpinningWeaponAndToolMod
             if (!Context.IsWorldReady || !isSpinning) return;
 
 
+            // Return if any active menu is open
+            if (Game1.activeClickableMenu != null)
+                return;
+
+            // Return if a dialogue is open or message box is showing
+            if (Game1.dialogueUp || Game1.messagePause)
+                return;
+
+            // Return if a shop menu is open
+            if (Game1.activeClickableMenu is StardewValley.Menus.ShopMenu)
+                return;
+
+            // Return if player is in end-of-day menu (e.g. level up screen or summary)
+            if (Game1.currentLocation.currentEvent != null && Game1.currentLocation.currentEvent.isFestival)
+                return;
+
+
+            if (Game1.player.UsingTool || Game1.player.isInBed.Value || Game1.player.isEating)
+                return;
+
             //checks for stamina if not enough won't spin or run any additiona code
             staminaDrainCounter++;
             if (staminaDrainCounter >= 6)
@@ -255,30 +270,66 @@ namespace SpinningWeaponAndToolMod
             }
 
 
-            if ((pickaxeSpinTickCounter >= (60 / Config.numberOfPickaxeSpinHitsPerSecond)) && !Game1.player.isEating)
+
+
+            int pickaxeTicksToSpin = 0;
+            if (Game1.player.CurrentTool is Pickaxe tempPickaxe && tempPickaxe.hasEnchantmentOfType<SwiftToolEnchantment>())
             {
+                pickaxeTicksToSpin = (int)(60 / (Config.numberOfAxeSpinHitsPerSecond + Config.pickaxeEnchantSwift));
+            }
+            else
+            {
+                pickaxeTicksToSpin = (60 / Config.numberOfPickaxeSpinHitsPerSecond);
+            }
+
+            if (pickaxeSpinTickCounter >= pickaxeTicksToSpin)
+            {
+
+
                 pickaxeSpinTickCounter = 0;
                 startSpinAnimation = true;
                 float startStamina = Game1.player.Stamina;
                 ApplySpinEffect();
                 Game1.player.Stamina = startStamina;
                 float playerMiningLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForPickaxePerLevel;
+                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
+                {
+                    playerMiningLevel = (Game1.player.MiningLevel * Config.reduceStaminaDrainForPickaxePerLevel) + Config.pickaxeEnchantEfficient;
+                }
                 Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerMiningLevel, 0.1f);
                 
             }
-            if ((axeSpinTickCounter >= (60/ Config.numberOfAxeSpinHitsPerSecond)) && !Game1.player.isEating)
-             {
+
+
+            int axeTicksToSpin = 0;
+            if (Game1.player.CurrentTool is Axe tempAxe && tempAxe.hasEnchantmentOfType<SwiftToolEnchantment>()) 
+            {
+                axeTicksToSpin = (int)(60 / (Config.numberOfAxeSpinHitsPerSecond + Config.pickaxeEnchantEfficient));
+            }
+            else
+            {
+                axeTicksToSpin = (60 / Config.numberOfAxeSpinHitsPerSecond);
+            }
+
+
+            if (axeSpinTickCounter >= axeTicksToSpin)
+            {
                 axeSpinTickCounter = 0;
                 startSpinAnimation = true;
                 float startStamina = Game1.player.Stamina;
                 ApplySpinEffect();
                 Game1.player.Stamina = startStamina;
-                float playerForgageLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForAxePerLevel;
+                float playerForgageLevel = Game1.player.ForagingLevel * Config.reduceStaminaDrainForAxePerLevel;
+
+                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
+                {
+                    playerForgageLevel = (Game1.player.ForagingLevel * Config.reduceStaminaDrainForAxePerLevel) + Config.axeEnchantEfficient;
+                }
                 Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerForgageLevel, 0.1f);
                 //Console.WriteLine($"playerForgageLevel  *.1: {playerForgageLevel} ");
 
             }
-            if ((weaponSpinTickCounter >= (60 / Config.numberOfWeaponSpinHitsPerSecond)) && !Game1.player.isEating)
+            if ((weaponSpinTickCounter >= (60 / Config.numberOfWeaponSpinHitsPerSecond)))
              {
                 weaponSpinTickCounter = 0;
                 startSpinAnimation = true;
@@ -299,9 +350,9 @@ namespace SpinningWeaponAndToolMod
 
             if (startSpinAnimation)
             {
-
+                ApplySpinAnimation();
                 ForceSpinAnimation(Game1.player.FacingDirection);
-                SpawnWindEffect();
+
             }
 
         }
@@ -325,6 +376,55 @@ namespace SpinningWeaponAndToolMod
             Game1.player.FarmerSprite.setCurrentFrame(frames[current]);
         }
 
+        private void ApplySpinAnimation()
+        {
+            Tool tool = Game1.player.CurrentTool;
+            if (tool == null) return;
+
+            Vector2 center = Game1.player.Tile;
+
+            switch (tool)
+            {
+                case MeleeWeapon weapon:
+
+                    switch (weapon.type.Value)
+                    {
+                        case 3: // Sword
+                            //Console.WriteLine($"Weapon is : {weapon.type.Value}");
+                            SpawnWeaponEffect(Config.swordSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+
+                        case 1: // Dagger
+                            //Console.WriteLine($"Weapon is : {weapon.type.Value}");
+                            SpawnWeaponEffect(Config.daggerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+
+                        case 2: // Club / Hammer
+                            //Console.WriteLine($"Weapon is : {weapon.type.Value}");
+                            SpawnWeaponEffect(Config.hammerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+
+                        default:
+                            //Console.WriteLine($"Weapon is : {weapon.type.Value}");
+                            SpawnWeaponEffect(Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+                    }
+                    break;
+
+                case Pickaxe pickaxe:
+
+                    SpawnToolEffect(pickaxe, (int)(Config.pickaxeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel));
+                   
+                    break;
+
+                case Axe axe:
+
+                    SpawnToolEffect(axe, (int)(Config.axeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel));
+                  
+                    break;
+            }
+        }
+
         private void ApplySpinEffect()
         {
             Tool tool = Game1.player.CurrentTool;
@@ -335,19 +435,45 @@ namespace SpinningWeaponAndToolMod
             switch (tool)
             {
                 case MeleeWeapon weapon:
-                   
-                    Game1.playSound("clubswipe");
-                    ApplyWeaponEffect(weapon, center, Config.weaponSpinRadius);
+
+                    switch (weapon.type.Value)
+                    {
+                        case 3: // Sword
+                            Game1.playSound("swordswipe");
+                           
+                            ApplyWeaponEffect(weapon, center, Config.swordSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+
+                        case 1: // Dagger
+                            Game1.playSound("daggerswipe");
+                           
+                            ApplyWeaponEffect(weapon, center, Config.daggerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+
+                        case 2: // Club / Hammer
+                            Game1.playSound("clubswipe");
+                           
+                            ApplyWeaponEffect(weapon, center, Config.hammerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+
+                        default:
+                            Game1.playSound("clubswipe");
+                          
+                            ApplyWeaponEffect(weapon, center, Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            break;
+                    }
                     break;
 
                 case Pickaxe pickaxe:
                     Game1.playSound("clubswipe");
-                    ApplyToolEffect(pickaxe, center, Config.pickaxeSpinRadius);
+                   
+                    ApplyToolEffect(pickaxe, center, (int)(Config.pickaxeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel));
                     break;
 
                 case Axe axe:
                     Game1.playSound("clubswipe");
-                    ApplyToolEffect(axe, center, Config.axeSpinRadius);
+                   
+                    ApplyToolEffect(axe, center, (int)(Config.axeSpinRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel)));
                     break;
             }
         }
@@ -410,8 +536,8 @@ namespace SpinningWeaponAndToolMod
                     {
                         if (npc is Monster monster && monster.GetBoundingBox().Intersects(area))
                         {
-                            int min = (int)(weapon.minDamage.Value * Config.weaponSpinPercentDamage);
-                            int max = (int)(weapon.maxDamage.Value * Config.weaponSpinPercentDamage);
+                            int min = (int)(weapon.minDamage.Value * Config.allWeaponSpinPercentDamage);
+                            int max = (int)(weapon.maxDamage.Value * Config.allWeaponSpinPercentDamage);
                             int damage = random.Next(min, max + 1);
 
                             float critChance = weapon.critChance.Value;
@@ -467,17 +593,88 @@ namespace SpinningWeaponAndToolMod
             }
         }
 
-        private void SpawnWindEffect()
+        private void SpawnWeaponEffect(int radius)
         {
+
             Vector2 playerCenter = Game1.player.Position + new Vector2(Game1.player.Sprite.SpriteWidth / 2, -32f);
             int numSprites = Config.numberOfSpinningSprite;
             double rotationSpeed = -500;
             double baseRotation = Game1.ticks * rotationSpeed;
 
-            Tool tool = Game1.player.CurrentTool;
-            TemporaryAnimatedSprite[] weaponEffect = new TemporaryAnimatedSprite[Config.weaponSpinRadius];
-            TemporaryAnimatedSprite[] axeEffect = new TemporaryAnimatedSprite[Config.axeSpinRadius];
-            TemporaryAnimatedSprite[] pickaxeEffect = new TemporaryAnimatedSprite[Config.pickaxeSpinRadius];
+            TemporaryAnimatedSprite[] weaponEffect = new TemporaryAnimatedSprite[radius];
+
+            for (int i = 0; i < numSprites; i++)
+            {
+                double angle = baseRotation + (Math.PI * 2 * i / numSprites);
+                float orbitRadius = 48.0f;  //48
+
+
+                float offsetX = (float)Math.Cos(angle) * orbitRadius;
+                float offsetY = (float)Math.Sin(angle) * orbitRadius;
+                Vector2 orbitPos = playerCenter + new Vector2(offsetX, offsetY);
+
+                
+       
+
+                string weaponID = Game1.player.CurrentItem.GetItemTypeId() + Game1.player.CurrentItem.ItemId;
+                WeaponSpriteData match = Config.weaponSpriteData
+                    .FirstOrDefault(w => w.itemCategoryAndItemID == weaponID);
+
+                string tileSheet = "TileSheets\\weapons";
+                Rectangle sourceRect = new Rectangle(0, 0, 16, 16);
+
+                if (match != null)
+                {
+                    tileSheet = match.tilesheetName;
+                    sourceRect = match.SourceRect;
+                }
+
+
+                for (int j = 0; j < weaponEffect.Length; j++)
+                {
+                    orbitRadius = 100 + (50 * j);
+                    offsetX = (float)Math.Cos(angle) * orbitRadius;
+                    offsetY = (float)Math.Sin(angle) * orbitRadius;
+                    orbitPos = playerCenter + new Vector2(offsetX, offsetY);
+                    weaponEffect[j] = new TemporaryAnimatedSprite(
+                    tileSheet,
+                    sourceRect, // First sword sprite
+                    100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                    {
+                        rotation = (float)angle,
+                        alpha = 0.4f,
+                        scale = 3.0f,
+                        motion = Vector2.Zero,
+                        layerDepth = 1f
+                    };
+
+                    if (weaponEffect[j] != null)
+                    {
+                        Game1.currentLocation.temporarySprites.Add(weaponEffect[j]);
+                    }
+
+                    //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
+                }
+
+
+
+                
+
+
+            }
+        }
+
+        private void SpawnToolEffect(Tool tool, int radius)
+        {
+
+            Vector2 playerCenter = Game1.player.Position + new Vector2(Game1.player.Sprite.SpriteWidth / 2, -32f);
+            int numSprites = Config.numberOfSpinningSprite;
+            double rotationSpeed = -500;
+            double baseRotation = Game1.ticks * rotationSpeed;
+
+            TemporaryAnimatedSprite[] axeEffect = new TemporaryAnimatedSprite[radius];
+            TemporaryAnimatedSprite[] pickaxeEffect = new TemporaryAnimatedSprite[radius];
+
 
             for (int i = 0; i < numSprites; i++)
             {
@@ -578,54 +775,6 @@ namespace SpinningWeaponAndToolMod
                     }
 
 
-
-
-                }
-                else if (tool is MeleeWeapon weapon)
-                {
-
-                    string weaponID = Game1.player.CurrentItem.GetItemTypeId() + Game1.player.CurrentItem.ItemId;
-                    WeaponSpriteData match = Config.weaponSpriteData
-                        .FirstOrDefault(w => w.itemCategoryAndItemID == weaponID);
-
-                    string tileSheet = "TileSheets\\weapons";
-                    Rectangle sourceRect = new Rectangle(0, 0, 16, 16);
-
-                    if (match != null)
-                    {
-                        tileSheet = match.tilesheetName;
-                        sourceRect = match.SourceRect;
-                    }
-
-
-                    for (int j = 0; j < weaponEffect.Length; j++)
-                    {
-                        orbitRadius = 100 + (50*j);
-                        offsetX = (float)Math.Cos(angle) * orbitRadius;
-                        offsetY = (float)Math.Sin(angle) * orbitRadius;
-                        orbitPos = playerCenter + new Vector2(offsetX, offsetY);
-                        weaponEffect[j] = new TemporaryAnimatedSprite(
-                        tileSheet,
-                        sourceRect, // First sword sprite
-                        100f, 1, 1, orbitPos, flicker: false, flipped: false)
-                        {
-                            rotation = (float)angle,
-                            alpha = 0.4f,
-                            scale = 3.0f,
-                            motion = Vector2.Zero,
-                            layerDepth = 1f
-                        };
-
-                        if (weaponEffect[j] != null)
-                        {
-                            Game1.currentLocation.temporarySprites.Add(weaponEffect[j]);
-                        }
-                            
-                        //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
-                    }
-
-
-
                 }
 
 
@@ -719,8 +868,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.weaponSpinRadius,
                 setValue: value => Config.weaponSpinRadius = value,
-                name: () => "Weapon Max Spin Radius",
-                tooltip: () => "Set Weapon Max Spin Radius",
+                name: () => "Other Weapon Base Spin Radius",
+                tooltip: () => "Set Other weapon type base Spin Radius. Applies to scythes and other weaponType if used in other mods",
                 min: 1,
                 max: 20,
                 interval: 1
@@ -728,10 +877,43 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddNumberOption(
                 mod: ModManifest,
-                getValue: () => Config.weaponSpinPercentDamage,
-                setValue: value => Config.weaponSpinPercentDamage = value,
-                name: () => "Weapon Spin Percent Damage",
-                tooltip: () => "Set to apply a percent of the weapon's base damage. Example if set to .50 only deals 50% of weapon damage per spin",
+                getValue: () => Config.swordSpinRadius,
+                setValue: value => Config.swordSpinRadius = value,
+                name: () => "Sword Base Spin Radius",
+                tooltip: () => "Set Sword base Spin Radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.daggerSpinRadius,
+                setValue: value => Config.daggerSpinRadius = value,
+                name: () => "Dagger Base Spin Radius",
+                tooltip: () => "Set Dagger Base Spin Radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.hammerSpinRadius,
+                setValue: value => Config.hammerSpinRadius = value,
+                name: () => "Hammer base Spin Radius",
+                tooltip: () => "Set Hammer BaseSpin Radius",
+                min: 1,
+                max: 20,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.allWeaponSpinPercentDamage,
+                setValue: value => Config.allWeaponSpinPercentDamage = value,
+                name: () => "All Weapon Percent Damage",
+                tooltip: () => "Set a percentage value of the weapon's base damage that should be applied to spin damage. Example if set to .50 only deals 50% of weapon damage per spin",
                 min: 0.01f,
                 max: 1.0f,
                 interval: 0.01f
@@ -755,8 +937,6 @@ namespace SpinningWeaponAndToolMod
             );
 
 
-
-
             gmcm.AddNumberOption(
                 mod: ModManifest,
                 getValue: () => Config.reduceStaminaDrainForPickaxePerLevel,
@@ -772,8 +952,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.pickaxeSpinRadius,
                 setValue: value => Config.pickaxeSpinRadius = value,
-                name: () => "Pickaxe Max Spin Radius",
-                tooltip: () => "Set Pickaxe Max Spin Radius",
+                name: () => "Pickaxe base spin Radius",
+                tooltip: () => "Set Pickaxe base Spin Radius",
                 min: 1,
                 max: 20,
                 interval: 1
@@ -785,6 +965,29 @@ namespace SpinningWeaponAndToolMod
                 setValue: value => Config.numberOfPickaxeSpinHitsPerSecond = value,
                 name: () => "Pickaxe Spin Hit Per Sec",
                 tooltip: () => "Number of times pickaxe spin attack hits area per second",
+                min: 1,
+                max: 60,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel,
+                setValue: value => Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel = value,
+                name: () => "Spin Radius per Tool Upgrade",
+                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additional radius unless 2 tool upgrade is done. Upgrade tool levels are: Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.pickaxeEnchantSwift,
+                setValue: value => Config.pickaxeEnchantSwift = value,
+                name: () => "Swift Enchant Grants Bonus Hits Per Second",
+                tooltip: () => "Number of bonus hits the pickaxe does if axe has the enchant Swift",
                 min: 1,
                 max: 60,
                 interval: 1
@@ -811,7 +1014,7 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.axeSpinRadius,
                 setValue: value => Config.axeSpinRadius = value,
-                name: () => "Set Axe Max Spin Radius",
+                name: () => "Axe base Spin Radius",
                 tooltip: () => "Set Axe Max Spin Radius",
                 min: 1,
                 max: 20,
@@ -820,10 +1023,32 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddNumberOption(
                 mod: ModManifest,
+                getValue: () => Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel,
+                setValue: value => Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel = value,
+                name: () => "Increase Radius per Tool Upgrade",
+                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additiona radius unless 2 tool upgrade is done. Upgrade tool levels are Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4 and does not limit here if other mod adds higher tool level",
+                min: 0.0f,
+                max: 3.0f,
+                interval: 0.1f
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
                 getValue: () => Config.numberOfAxeSpinHitsPerSecond,
                 setValue: value => Config.numberOfAxeSpinHitsPerSecond = value,
                 name: () => "Axe Spin Hit Per Sec",
                 tooltip: () => "Number of times axe spin attack hits area per second",
+                min: 1,
+                max: 60,
+                interval: 1
+            );
+
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                getValue: () => Config.axeEnchantSwift,
+                setValue: value => Config.axeEnchantSwift = value,
+                name: () => "Swift Enchant Grants Bonus Hits Per Second",
+                tooltip: () => "Number of bonus hits the axe does if axe has the enchant Swift",
                 min: 1,
                 max: 60,
                 interval: 1
