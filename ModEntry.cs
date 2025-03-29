@@ -9,6 +9,10 @@ using StardewValley.TerrainFeatures;
 using GenericModConfigMenu;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Enchantments;
+using xTile.Tiles;
+using static StardewValley.Minigames.CraneGame;
+using static System.Net.Mime.MediaTypeNames;
+using HarmonyLib;
 
 
 namespace SpinningWeaponAndToolMod
@@ -78,119 +82,126 @@ namespace SpinningWeaponAndToolMod
         public List<WeaponSpriteData> weaponSpriteData { get; set; } = new List<WeaponSpriteData>
         {
 
-            new WeaponSpriteData{ItemName= "Rusty Sword", itemCategoryAndItemID = "(W)0", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,0,16,16)},
-            new WeaponSpriteData{ItemName= "Silver Saber", itemCategoryAndItemID = "(W)1", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,0,16,16)},
-            new WeaponSpriteData{ItemName= "Dark Sword", itemCategoryAndItemID = "(W)2", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,0,16,16)},
-            new WeaponSpriteData{ItemName= "Holy Blade", itemCategoryAndItemID = "(W)3", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,0,16,16)},
-            new WeaponSpriteData{ItemName= "Galaxy Sword", itemCategoryAndItemID = "(W)4", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,0,16,16)},
-            new WeaponSpriteData{ItemName= "Bone Sword", itemCategoryAndItemID = "(W)5", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,0,16,16)},
-            new WeaponSpriteData{ItemName= "Iron Edge", itemCategoryAndItemID = "(W)6", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,0,16,16)},
-            new WeaponSpriteData{ItemName= "Templar's Blade", itemCategoryAndItemID = "(W)7", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,0,16,16)},
-            new WeaponSpriteData{ItemName= "Obsidian Edge", itemCategoryAndItemID = "(W)8", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,16,16,16)},
-            new WeaponSpriteData{ItemName= "Lava Katana", itemCategoryAndItemID = "(W)9", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,16,16,16)},
-            new WeaponSpriteData{ItemName= "Claymore", itemCategoryAndItemID = "(W)10", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,16,16,16)},
-            new WeaponSpriteData{ItemName= "Steel Smallsword", itemCategoryAndItemID = "(W)11", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,16,16,16)},
-            new WeaponSpriteData{ItemName= "Wooden Blade", itemCategoryAndItemID = "(W)12", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,16,16,16)},
-            new WeaponSpriteData{ItemName= "Insect Head", itemCategoryAndItemID = "(W)13", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,16,16,16)},
-            new WeaponSpriteData{ItemName= "Neptune's Glaive", itemCategoryAndItemID = "(W)14", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,16,16,16)},
-            new WeaponSpriteData{ItemName= "Forest Sword", itemCategoryAndItemID = "(W)15", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,16,16,16)},
-            new WeaponSpriteData{ItemName= "Carving Knife", itemCategoryAndItemID = "(W)16", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,32,16,16)},
-            new WeaponSpriteData{ItemName= "Iron Dirk", itemCategoryAndItemID = "(W)17", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,32,16,16)},
-            new WeaponSpriteData{ItemName= "Burglar's Shank", itemCategoryAndItemID = "(W)18", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,32,16,16)},
-            new WeaponSpriteData{ItemName= "Shadow Dagger", itemCategoryAndItemID = "(W)19", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,32,16,16)},
-            new WeaponSpriteData{ItemName= "Elf Blade", itemCategoryAndItemID = "(W)20", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,32,16,16)},
-            new WeaponSpriteData{ItemName= "Crystal Dagger", itemCategoryAndItemID = "(W)21", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,32,16,16)},
-            new WeaponSpriteData{ItemName= "Wind Spire", itemCategoryAndItemID = "(W)22", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,32,16,16)},
-            new WeaponSpriteData{ItemName= "Galaxy Dagger", itemCategoryAndItemID = "(W)23", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,32,16,16)},
-            new WeaponSpriteData{ItemName= "Wood Club", itemCategoryAndItemID = "(W)24", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,48,16,16)},
-            new WeaponSpriteData{ItemName= "Alex's Bat", itemCategoryAndItemID = "(W)25", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,48,16,16)},
-            new WeaponSpriteData{ItemName= "Lead Rod", itemCategoryAndItemID = "(W)26", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,48,16,16)},
-            new WeaponSpriteData{ItemName= "Wood Mallet", itemCategoryAndItemID = "(W)27", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,48,16,16)},
-            new WeaponSpriteData{ItemName= "The Slammer", itemCategoryAndItemID = "(W)28", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,48,16,16)},
-            new WeaponSpriteData{ItemName= "Galaxy Hammer", itemCategoryAndItemID = "(W)29", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,48,16,16)},
-            new WeaponSpriteData{ItemName= "Sam's Old Guitar", itemCategoryAndItemID = "(W)30", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,48,16,16)},
-            new WeaponSpriteData{ItemName= "Femur", itemCategoryAndItemID = "(W)31", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,48,16,16)},
-            new WeaponSpriteData{ItemName= "Slingshot", itemCategoryAndItemID = "(W)32", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,64,16,16)},
-            new WeaponSpriteData{ItemName= "Master Slingshot", itemCategoryAndItemID = "(W)33", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,64,16,16)},
-            new WeaponSpriteData{ItemName= "Galaxy Slingshot", itemCategoryAndItemID = "(W)34", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,64,16,16)},
-            new WeaponSpriteData{ItemName= "Elliott's Pencil", itemCategoryAndItemID = "(W)35", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,64,16,16)},
-            new WeaponSpriteData{ItemName= "Maru's Wrench", itemCategoryAndItemID = "(W)36", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,64,16,16)},
-            new WeaponSpriteData{ItemName= "Harvey's Mallet", itemCategoryAndItemID = "(W)37", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,64,16,16)},
-            new WeaponSpriteData{ItemName= "Penny's Fryer", itemCategoryAndItemID = "(W)38", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,64,16,16)},
-            new WeaponSpriteData{ItemName= "Leah's Whittler", itemCategoryAndItemID = "(W)39", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,64,16,16)},
-            new WeaponSpriteData{ItemName= "Abby's Planchette", itemCategoryAndItemID = "(W)40", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,80,16,16)},
-            new WeaponSpriteData{ItemName= "Seb's Lost Mace", itemCategoryAndItemID = "(W)41", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,80,16,16)},
-            new WeaponSpriteData{ItemName= "Haley's Iron", itemCategoryAndItemID = "(W)42", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,80,16,16)},
-            new WeaponSpriteData{ItemName= "Pirate's Sword", itemCategoryAndItemID = "(W)43", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,80,16,16)},
-            new WeaponSpriteData{ItemName= "Cutlass", itemCategoryAndItemID = "(W)44", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,80,16,16)},
-            new WeaponSpriteData{ItemName= "Wicked Kris", itemCategoryAndItemID = "(W)45", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,80,16,16)},
-            new WeaponSpriteData{ItemName= "Kudgel", itemCategoryAndItemID = "(W)46", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,80,16,16)},
-            new WeaponSpriteData{ItemName= "Scythe", itemCategoryAndItemID = "(W)47", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,80,16,16)},
-            new WeaponSpriteData{ItemName= "Yeti Tooth", itemCategoryAndItemID = "(W)48", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,96,16,16)},
-            new WeaponSpriteData{ItemName= "Rapier", itemCategoryAndItemID = "(W)49", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,96,16,16)},
-            new WeaponSpriteData{ItemName= "Steel Falchion", itemCategoryAndItemID = "(W)50", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,96,16,16)},
-            new WeaponSpriteData{ItemName= "Broken Trident", itemCategoryAndItemID = "(W)51", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,96,16,16)},
-            new WeaponSpriteData{ItemName= "Tempered Broadsword", itemCategoryAndItemID = "(W)52", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,96,16,16)},
-            new WeaponSpriteData{ItemName= "Golden Scythe", itemCategoryAndItemID = "(W)53", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,96,16,16)},
-            new WeaponSpriteData{ItemName= "Dwarf Sword", itemCategoryAndItemID = "(W)54", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,96,16,16)},
-            new WeaponSpriteData{ItemName= "Dwarf Hammer", itemCategoryAndItemID = "(W)55", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,96,16,16)},
-            new WeaponSpriteData{ItemName= "Dwarf Dagger", itemCategoryAndItemID = "(W)56", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,112,16,16)},
-            new WeaponSpriteData{ItemName= "Dragontooth Cutlass", itemCategoryAndItemID = "(W)57", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,112,16,16)},
-            new WeaponSpriteData{ItemName= "Dragontooth Club", itemCategoryAndItemID = "(W)58", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,112,16,16)},
-            new WeaponSpriteData{ItemName= "Dragontooth Shiv", itemCategoryAndItemID = "(W)59", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,112,16,16)},
-            new WeaponSpriteData{ItemName= "Ossified Blade", itemCategoryAndItemID = "(W)60", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,112,16,16)},
-            new WeaponSpriteData{ItemName= "Iridium Needle", itemCategoryAndItemID = "(W)61", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,112,16,16)},
-            new WeaponSpriteData{ItemName= "Infinity Blade", itemCategoryAndItemID = "(W)62", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,112,16,16)},
-            new WeaponSpriteData{ItemName= "Infinity Gavel", itemCategoryAndItemID = "(W)63", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,112,16,16)},
-            new WeaponSpriteData{ItemName= "Infinity Dagger", itemCategoryAndItemID = "(W)64", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,128,16,16)},
-            new WeaponSpriteData{ItemName= "Meowmere", itemCategoryAndItemID = "(W)65", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,128,16,16)},
-            new WeaponSpriteData{ItemName= "Iridium Scythe", itemCategoryAndItemID = "(W)66", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,128,16,16)},
-            new WeaponSpriteData{ItemName= "Axe", itemCategoryAndItemID = "(T)Axe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,160,16,32)},
-            new WeaponSpriteData{ItemName= "Copper Axe", itemCategoryAndItemID = "(T)CopperAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,160,16,32)},
-            new WeaponSpriteData{ItemName= "Steel Axe", itemCategoryAndItemID = "(T)SteelAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,160,16,32)},
-            new WeaponSpriteData{ItemName= "Gold Axe", itemCategoryAndItemID = "(T)GoldAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,192,16,32)},
-            new WeaponSpriteData{ItemName= "Iridium Axe", itemCategoryAndItemID = "(T)IridiumAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,192,16,32)},
-            new WeaponSpriteData{ItemName= "Pickaxe", itemCategoryAndItemID = "(T)Pickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,96,16,32)},
-            new WeaponSpriteData{ItemName= "Copper Pickaxe", itemCategoryAndItemID = "(T)CopperPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,96,16,32)},
-            new WeaponSpriteData{ItemName= "Steel Pickaxe", itemCategoryAndItemID = "(T)SteelPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,96,16,32)},
-            new WeaponSpriteData{ItemName= "Gold Pickaxe", itemCategoryAndItemID = "(T)GoldPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,128,16,32)},
-            new WeaponSpriteData{ItemName= "Iridium Pickaxe", itemCategoryAndItemID = "(T)IridiumPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,128,16,32)},
-            new WeaponSpriteData{ItemName= "Rusty Sword", itemCategoryAndItemID = "(W)0", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0, 0, 16, 16)},
-            new WeaponSpriteData{ItemName= "Axe", itemCategoryAndItemID = "(T)Axe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,160,16,32)},
-            new WeaponSpriteData{ItemName= "Copper Axe", itemCategoryAndItemID = "(T)CopperAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,160,16,32)},
-            new WeaponSpriteData{ItemName= "Steel Axe", itemCategoryAndItemID = "(T)SteelAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,160,16,32)},
-            new WeaponSpriteData{ItemName= "Gold Axe", itemCategoryAndItemID = "(T)GoldAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,192,16,32)},
-            new WeaponSpriteData{ItemName= "Iridium Axe", itemCategoryAndItemID = "(T)IridiumAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,192,16,32)},
-            new WeaponSpriteData{ItemName= "Pickaxe", itemCategoryAndItemID = "(T)Pickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,96,16,32)},
-            new WeaponSpriteData{ItemName= "Copper Pickaxe", itemCategoryAndItemID = "(T)CopperPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,96,16,32)},
-            new WeaponSpriteData{ItemName= "Steel Pickaxe", itemCategoryAndItemID = "(T)SteelPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,96,16,32)},
-            new WeaponSpriteData{ItemName= "Gold Pickaxe", itemCategoryAndItemID = "(T)GoldPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,128,16,32)},
-            new WeaponSpriteData{ItemName= "Iridium Pickaxe", itemCategoryAndItemID = "(T)IridiumPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,128,16,32)},
-            new WeaponSpriteData{ItemName= "Watering Can", itemCategoryAndItemID = "(T)WateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(48,224,16,32)},
-            new WeaponSpriteData{ItemName= "Copper Watering Can", itemCategoryAndItemID = "(T)CopperWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(160,224,16,32)},
-            new WeaponSpriteData{ItemName= "Steel Watering Can", itemCategoryAndItemID = "(T)SteelWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(272,224,16,32)},
-            new WeaponSpriteData{ItemName= "Gold Watering Can", itemCategoryAndItemID = "(T)GoldWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(48,256,16,32)},
-            new WeaponSpriteData{ItemName= "Iridium Watering Can", itemCategoryAndItemID = "(T)IridiumWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(160,256,16,32)},
-            new WeaponSpriteData{ItemName= "Hoe", itemCategoryAndItemID = "(T)Hoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,32,16,32)},
-            new WeaponSpriteData{ItemName= "Copper Hoe", itemCategoryAndItemID = "(T)CopperHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,32,16,32)},
-            new WeaponSpriteData{ItemName= "Steel Hoe", itemCategoryAndItemID = "(T)SteelHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,32,16,32)},
-            new WeaponSpriteData{ItemName= "Gold Hoe", itemCategoryAndItemID = "(T)GoldHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,64,16,32)},
-            new WeaponSpriteData{ItemName= "Iridium Hoe", itemCategoryAndItemID = "(T)IridiumHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,64,16,32)}
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Rusty Sword", itemCategoryAndItemID = "(W)0", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Silver Saber", itemCategoryAndItemID = "(W)1", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Dark Sword", itemCategoryAndItemID = "(W)2", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Holy Blade", itemCategoryAndItemID = "(W)3", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Galaxy Sword", itemCategoryAndItemID = "(W)4", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Bone Sword", itemCategoryAndItemID = "(W)5", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iron Edge", itemCategoryAndItemID = "(W)6", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Templar's Blade", itemCategoryAndItemID = "(W)7", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,0,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Obsidian Edge", itemCategoryAndItemID = "(W)8", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Lava Katana", itemCategoryAndItemID = "(W)9", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Claymore", itemCategoryAndItemID = "(W)10", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Smallsword", itemCategoryAndItemID = "(W)11", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Wooden Blade", itemCategoryAndItemID = "(W)12", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Insect Head", itemCategoryAndItemID = "(W)13", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Neptune's Glaive", itemCategoryAndItemID = "(W)14", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Forest Sword", itemCategoryAndItemID = "(W)15", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,16,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Carving Knife", itemCategoryAndItemID = "(W)16", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iron Dirk", itemCategoryAndItemID = "(W)17", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Burglar's Shank", itemCategoryAndItemID = "(W)18", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Shadow Dagger", itemCategoryAndItemID = "(W)19", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Elf Blade", itemCategoryAndItemID = "(W)20", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Crystal Dagger", itemCategoryAndItemID = "(W)21", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Wind Spire", itemCategoryAndItemID = "(W)22", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Galaxy Dagger", itemCategoryAndItemID = "(W)23", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,32,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Wood Club", itemCategoryAndItemID = "(W)24", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Alex's Bat", itemCategoryAndItemID = "(W)25", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Lead Rod", itemCategoryAndItemID = "(W)26", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Wood Mallet", itemCategoryAndItemID = "(W)27", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "The Slammer", itemCategoryAndItemID = "(W)28", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Galaxy Hammer", itemCategoryAndItemID = "(W)29", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Sam's Old Guitar", itemCategoryAndItemID = "(W)30", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Femur", itemCategoryAndItemID = "(W)31", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,48,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Slingshot", itemCategoryAndItemID = "(W)32", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Master Slingshot", itemCategoryAndItemID = "(W)33", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Galaxy Slingshot", itemCategoryAndItemID = "(W)34", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Elliott's Pencil", itemCategoryAndItemID = "(W)35", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Maru's Wrench", itemCategoryAndItemID = "(W)36", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Harvey's Mallet", itemCategoryAndItemID = "(W)37", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Penny's Fryer", itemCategoryAndItemID = "(W)38", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Leah's Whittler", itemCategoryAndItemID = "(W)39", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,64,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Abby's Planchette", itemCategoryAndItemID = "(W)40", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Seb's Lost Mace", itemCategoryAndItemID = "(W)41", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Haley's Iron", itemCategoryAndItemID = "(W)42", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Pirate's Sword", itemCategoryAndItemID = "(W)43", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Cutlass", itemCategoryAndItemID = "(W)44", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Wicked Kris", itemCategoryAndItemID = "(W)45", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Kudgel", itemCategoryAndItemID = "(W)46", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Scythe", itemCategoryAndItemID = "(W)47", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,80,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Yeti Tooth", itemCategoryAndItemID = "(W)48", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Rapier", itemCategoryAndItemID = "(W)49", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Falchion", itemCategoryAndItemID = "(W)50", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Broken Trident", itemCategoryAndItemID = "(W)51", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Tempered Broadsword", itemCategoryAndItemID = "(W)52", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Golden Scythe", itemCategoryAndItemID = "(W)53", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Dwarf Sword", itemCategoryAndItemID = "(W)54", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Dwarf Hammer", itemCategoryAndItemID = "(W)55", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,96,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Dwarf Dagger", itemCategoryAndItemID = "(W)56", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Dragontooth Cutlass", itemCategoryAndItemID = "(W)57", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Dragontooth Club", itemCategoryAndItemID = "(W)58", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Dragontooth Shiv", itemCategoryAndItemID = "(W)59", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(48,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Ossified Blade", itemCategoryAndItemID = "(W)60", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(64,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Needle", itemCategoryAndItemID = "(W)61", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(80,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Infinity Blade", itemCategoryAndItemID = "(W)62", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(96,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Infinity Gavel", itemCategoryAndItemID = "(W)63", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(112,112,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Infinity Dagger", itemCategoryAndItemID = "(W)64", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0,128,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Meowmere", itemCategoryAndItemID = "(W)65", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(16,128,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Scythe", itemCategoryAndItemID = "(W)66", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(32,128,16,16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Axe", itemCategoryAndItemID = "(T)Axe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,160,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Copper Axe", itemCategoryAndItemID = "(T)CopperAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,160,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Axe", itemCategoryAndItemID = "(T)SteelAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,160,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Gold Axe", itemCategoryAndItemID = "(T)GoldAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,192,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Axe", itemCategoryAndItemID = "(T)IridiumAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,192,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Pickaxe", itemCategoryAndItemID = "(T)Pickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,96,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Copper Pickaxe", itemCategoryAndItemID = "(T)CopperPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,96,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Pickaxe", itemCategoryAndItemID = "(T)SteelPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,96,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Gold Pickaxe", itemCategoryAndItemID = "(T)GoldPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,128,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Pickaxe", itemCategoryAndItemID = "(T)IridiumPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,128,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Rusty Sword", itemCategoryAndItemID = "(W)0", tilesheetName = "TileSheets\\weapons", SourceRect = new Rectangle(0, 0, 16, 16)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Axe", itemCategoryAndItemID = "(T)Axe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,160,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Copper Axe", itemCategoryAndItemID = "(T)CopperAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,160,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Axe", itemCategoryAndItemID = "(T)SteelAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,160,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Gold Axe", itemCategoryAndItemID = "(T)GoldAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,192,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Axe", itemCategoryAndItemID = "(T)IridiumAxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,192,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Pickaxe", itemCategoryAndItemID = "(T)Pickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,96,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Copper Pickaxe", itemCategoryAndItemID = "(T)CopperPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,96,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Pickaxe", itemCategoryAndItemID = "(T)SteelPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,96,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Gold Pickaxe", itemCategoryAndItemID = "(T)GoldPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,128,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Pickaxe", itemCategoryAndItemID = "(T)IridiumPickaxe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,128,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Watering Can", itemCategoryAndItemID = "(T)WateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(48,224,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Copper Watering Can", itemCategoryAndItemID = "(T)CopperWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(160,224,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Watering Can", itemCategoryAndItemID = "(T)SteelWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(272,224,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Gold Watering Can", itemCategoryAndItemID = "(T)GoldWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(48,256,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Watering Can", itemCategoryAndItemID = "(T)IridiumWateringCan", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(160,256,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Hoe", itemCategoryAndItemID = "(T)Hoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,32,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Copper Hoe", itemCategoryAndItemID = "(T)CopperHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,32,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Steel Hoe", itemCategoryAndItemID = "(T)SteelHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(304,32,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Gold Hoe", itemCategoryAndItemID = "(T)GoldHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(80,64,16,32)},
+            new WeaponSpriteData{ModID = null, fullPath = null, ItemName= "Iridium Hoe", itemCategoryAndItemID = "(T)IridiumHoe", tilesheetName = "TileSheets\\tools", SourceRect = new Rectangle(192,64,16,32)}
 
         };
     }
 
     public class WeaponSpriteData
     {
+        public string ModID { get; set; }
+        public string fullPath { get; set; }
         public string ItemName { get; set; }
         public string itemCategoryAndItemID {get;set;}
         public string tilesheetName { get; set; }
         public Rectangle SourceRect { get; set; }
+
         
     }
   
-    public class ModEntry : Mod
+     
+    public partial class ModEntry : Mod
     {
+        private List<string> modIds = new(); // Initialize to avoid null error
+
+        public static ModEntry Instance { get; private set; }
         private bool startSpinAnimation = false;
         private int staminaDrainCounter = 0;
         private bool isSpinning = false;
@@ -203,55 +214,23 @@ namespace SpinningWeaponAndToolMod
         private int rotateTickCounter = 0;
         private int facingDirectionIndex = 0;
         private ModConfig Config;
+        private string lastItemKey = null;
 
         public override void Entry(IModHelper helper)
         {
+
+
+            Instance = this;
             Config = helper.ReadConfig<ModConfig>();
+            var harmony = new Harmony(ModManifest.UniqueID);
+            harmony.PatchAll(); // Automatically applies all [HarmonyPatch] classes in your mod
             helper.Events.Input.ButtonPressed += OnButtonPressed;
             helper.Events.Input.ButtonReleased += OnButtonReleased;
             helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
             helper.Events.GameLoop.GameLaunched += OnGameLaunched;
         }
 
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
-        {
-
-            //Return if world hasn't been loaded
-            if (!Context.IsWorldReady)
-                return;
-
-
-
-
-            Tool tool = Game1.player.CurrentTool;
-
-            if ((e.Button == Config.SpinHotkey|| e.Button == Config.SpinHotkeyController) && tool is not null &&
-                (tool is Pickaxe || tool is Axe || tool is WateringCan || tool is Hoe || (tool is MeleeWeapon weapon)))
-            {
-                isSpinning = true;
-                weaponSpinTickCounter = 0;
-                axeSpinTickCounter = 0;
-                pickaxeSpinTickCounter = 0;
-                rotateTickCounter = 0;
-                facingDirectionIndex = 0;
-                wateringcanSpinTickCounter = 0;
-                hoeSpinTickCounter = 0;
-
-                Game1.player.UsingTool = false;
-                Game1.player.completelyStopAnimatingOrDoingAction();
-            }
-        }
-
-        private void OnButtonReleased(object sender, ButtonReleasedEventArgs e)
-        {
-            if (!Context.IsWorldReady) return;
-
-            if ((e.Button == Config.SpinHotkey || e.Button == Config.SpinHotkeyController) && isSpinning)
-            {
-                StopSpinning();
-            }
-        }
-
+       
         private void StopSpinning()
         {
             startSpinAnimation = false;
@@ -268,219 +247,8 @@ namespace SpinningWeaponAndToolMod
             hoeSpinTickCounter = 0;
         }
 
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
-        {
+       
 
-            if (!Context.IsWorldReady || !isSpinning) return;
-
-
-            // Return if any active menu is open
-            if (Game1.activeClickableMenu != null)
-                return;
-
-            // Return if a dialogue is open or message box is showing
-            if (Game1.dialogueUp || Game1.messagePause)
-                return;
-
-            // Return if a shop menu is open
-            if (Game1.activeClickableMenu is StardewValley.Menus.ShopMenu)
-                return;
-
-            // Return if player is in end-of-day menu (e.g. level up screen or summary)
-            if (Game1.currentLocation.currentEvent != null && Game1.currentLocation.currentEvent.isFestival)
-                return;
-
-
-            if (Game1.player.UsingTool || Game1.player.isInBed.Value || Game1.player.isEating)
-                return;
-
-            //checks for stamina if not enough won't spin or run any additiona code
-            staminaDrainCounter++;
-            if (staminaDrainCounter >= 6)
-            {
-                staminaDrainCounter = 0;
-                float staminaCost = Config.BaseStaminaDrain;
-
-                if (Game1.player.Stamina < staminaCost)
-                {
-                    //Monitor.Log("Not enough stamina to continue spinning.", LogLevel.Debug);
-                    StopSpinning();
-                    return;
-                }
-
-            }
-
-            
-
-
-
-            if (Game1.player.CurrentTool is Pickaxe)
-            {
-                pickaxeSpinTickCounter++;
-            }
-            if (Game1.player.CurrentTool is Axe)
-            {
-                axeSpinTickCounter++;
-            }
-            if (Game1.player.CurrentTool is MeleeWeapon)
-            {
-                weaponSpinTickCounter++;
-            }
-            if (Game1.player.CurrentTool is WateringCan)
-            {
-                wateringcanSpinTickCounter++;
-                
-            }
-            if (Game1.player.CurrentTool is Hoe)
-            {
-                hoeSpinTickCounter++;
-            }
-
-
-
-            int maxWateringCanSpinTickCounter = 0;
-            maxWateringCanSpinTickCounter = (60 / 3);
-
-            if (wateringcanSpinTickCounter >= maxWateringCanSpinTickCounter && Game1.player.CurrentTool is WateringCan wateringCan)
-            {
-                int waterLeft = wateringCan.WaterLeft;
-                
-                wateringcanSpinTickCounter = 0;
-                startSpinAnimation = true;
-                float startStamina = Game1.player.Stamina;
-                ApplySpinEffect();
-                Game1.player.Stamina = startStamina;
-                float playerfarmingLevel = Game1.player.FarmingLevel * Config.reduceStaminaDrainForWateringCanPerLevel;
-                wateringCan.WaterLeft = waterLeft - 1;
-                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
-                {
-                    playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForWateringCanPerLevel) + Config.wateringcanEnchantEfficient;
-                }
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel, 0.1f);
-            }
-
-
-
-
-            int maxhoeSpinTickCounter = 0;
-            if (Game1.player.CurrentTool is Hoe tempHoe && tempHoe.hasEnchantmentOfType<SwiftToolEnchantment>())
-            {
-                maxhoeSpinTickCounter = (int)(60 / (Config.numberOfHoeSpinHitsPerSecond + Config.HoeEnchantSwift));
-            }
-            else
-            {
-                maxhoeSpinTickCounter = (60 / Config.numberOfHoeSpinHitsPerSecond);
-            }
-
-            if (hoeSpinTickCounter >= maxhoeSpinTickCounter)
-            {
-
-
-                hoeSpinTickCounter = 0;
-                startSpinAnimation = true;
-                float startStamina = Game1.player.Stamina;
-                ApplySpinEffect();
-                Game1.player.Stamina = startStamina;
-                float playerfarmingLevel = Game1.player.FarmingLevel * Config.reduceStaminaDrainForHoePerLevel;
-                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
-                {
-                    playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForHoePerLevel) + Config.HoeEnchantEfficient;
-                }
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel, 0.1f);
-
-            }
-
-
-
-
-
-
-            int pickaxeTicksToSpin = 0;
-            if (Game1.player.CurrentTool is Pickaxe tempPickaxe && tempPickaxe.hasEnchantmentOfType<SwiftToolEnchantment>())
-            {
-                pickaxeTicksToSpin = (int)(60 / (Config.numberOfAxeSpinHitsPerSecond + Config.pickaxeEnchantSwift));
-            }
-            else
-            {
-                pickaxeTicksToSpin = (60 / Config.numberOfPickaxeSpinHitsPerSecond);
-            }
-
-            if (pickaxeSpinTickCounter >= pickaxeTicksToSpin)
-            {
-
-
-                pickaxeSpinTickCounter = 0;
-                startSpinAnimation = true;
-                float startStamina = Game1.player.Stamina;
-                ApplySpinEffect();
-                Game1.player.Stamina = startStamina;
-                float playerMiningLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForPickaxePerLevel;
-                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
-                {
-                    playerMiningLevel = (Game1.player.MiningLevel * Config.reduceStaminaDrainForPickaxePerLevel) + Config.pickaxeEnchantEfficient;
-                }
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerMiningLevel, 0.1f);
-                
-            }
-
-
-            int axeTicksToSpin = 0;
-            if (Game1.player.CurrentTool is Axe tempAxe && tempAxe.hasEnchantmentOfType<SwiftToolEnchantment>()) 
-            {
-                axeTicksToSpin = (int)(60 / (Config.numberOfAxeSpinHitsPerSecond + Config.pickaxeEnchantEfficient));
-            }
-            else
-            {
-                axeTicksToSpin = (60 / Config.numberOfAxeSpinHitsPerSecond);
-            }
-
-
-            if (axeSpinTickCounter >= axeTicksToSpin)
-            {
-                axeSpinTickCounter = 0;
-                startSpinAnimation = true;
-                float startStamina = Game1.player.Stamina;
-                ApplySpinEffect();
-                Game1.player.Stamina = startStamina;
-                float playerForgageLevel = Game1.player.ForagingLevel * Config.reduceStaminaDrainForAxePerLevel;
-
-                if (Game1.player.CurrentTool.hasEnchantmentOfType<EfficientToolEnchantment>())
-                {
-                    playerForgageLevel = (Game1.player.ForagingLevel * Config.reduceStaminaDrainForAxePerLevel) + Config.axeEnchantEfficient;
-                }
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerForgageLevel, 0.1f);
-                //Console.WriteLine($"playerForgageLevel  *.1: {playerForgageLevel} ");
-
-            }
-            if ((weaponSpinTickCounter >= (60 / Config.numberOfWeaponSpinHitsPerSecond)))
-             {
-                weaponSpinTickCounter = 0;
-                startSpinAnimation = true;
-                float startStamina = Game1.player.Stamina;
-                ApplySpinEffect();
-
-                //drains weapon stamina only if weapon is not a scythe
-                if (!Game1.player.CurrentTool.isScythe())
-                {
-                    Game1.player.Stamina = startStamina;
-                    float playerCombatLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForWeaponsPerLevel;
-                    Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerCombatLevel, 0.1f);
-                    //Console.WriteLine($"playerCombatLevel  *.1: {playerCombatLevel} ");
-                }
-
-
-            }
-
-            if (startSpinAnimation)
-            {
-                ApplySpinAnimation();
-                ForceSpinAnimation(Game1.player.FacingDirection);
-
-            }
-
-        }
-
-        
         private void ForceSpinAnimation(int facing)
         {
             int[] frames = facing switch
@@ -772,21 +540,28 @@ namespace SpinningWeaponAndToolMod
                 float offsetY = (float)Math.Sin(angle) * orbitRadius;
                 Vector2 orbitPos = playerCenter + new Vector2(offsetX, offsetY);
 
-                
-       
 
+
+                
                 string weaponID = Game1.player.CurrentItem.GetItemTypeId() + Game1.player.CurrentItem.ItemId;
                 WeaponSpriteData match = Config.weaponSpriteData
                     .FirstOrDefault(w => w.itemCategoryAndItemID == weaponID);
-
+                
                 string tileSheet = "TileSheets\\weapons";
-                Rectangle sourceRect = new Rectangle(0, 0, 16, 16);
 
+                Rectangle sourceRect = new Rectangle(0, 0, 16, 16);
+                string modID = null;
+                int imageXpos = 0;
+                int imageYpos = 0;
+                Texture2D texture = null;
                 if (match != null)
                 {
                     tileSheet = match.tilesheetName;
                     sourceRect = match.SourceRect;
+
+                  
                 }
+
 
 
                 for (int j = 0; j < weaponEffect.Length; j++)
@@ -809,10 +584,12 @@ namespace SpinningWeaponAndToolMod
 
                     if (weaponEffect[j] != null)
                     {
+
+
                         Game1.currentLocation.temporarySprites.Add(weaponEffect[j]);
                     }
 
-                    //Console.WriteLine($"weaponID: {weaponID} , tilesheet: {tileSheet} , sourceRect:{sourceRect}");
+                    
                 }
 
 
