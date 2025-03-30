@@ -360,9 +360,11 @@ namespace SpinningWeaponAndToolMod
                             break;
 
                         default:
-                            Game1.playSound("clubswipe");
+                            Game1.playSound("swordswipe");  //mainly for Scythe
                           
                             ApplyWeaponEffect(weapon, center, Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            
+                            
                             break;
                     }
                     break;
@@ -447,11 +449,16 @@ namespace SpinningWeaponAndToolMod
             }
         }
 
-
         private void ApplyWeaponEffect(MeleeWeapon weapon, Vector2 center, int radius)
         {
             GameLocation location = Game1.currentLocation;
             Random random = new((int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed + Game1.timeOfDay);
+            Farmer player = Game1.player;
+
+            // Determine the type of scythe
+            bool isRegularScythe = weapon.Name == "Scythe";
+            bool isGoldenScythe = weapon.Name == "Golden Scythe";
+            bool isIridiumScythe = weapon.Name == "Iridium Scythe";
 
             for (int x = -radius; x <= radius; x++)
             {
@@ -460,6 +467,7 @@ namespace SpinningWeaponAndToolMod
                     Vector2 tile = new(center.X + x, center.Y + y);
                     Rectangle area = new((int)tile.X * 64, (int)tile.Y * 64, 64, 64);
 
+                    // Damage monsters within the area
                     foreach (var npc in location.characters.ToList())
                     {
                         if (npc is Monster monster && monster.GetBoundingBox().Intersects(area))
@@ -487,38 +495,111 @@ namespace SpinningWeaponAndToolMod
                                 critChance: isCrit ? 1f : 0f,
                                 critMultiplier: isCrit ? critMult : 1f,
                                 triggerMonsterInvincibleTimer: false,
-                                who: Game1.player,
+                                who: player,
                                 isProjectile: false
                             );
                         }
                     }
 
-
-
                     // Cut weeds (objects)
-                    if (location.objects.TryGetValue(tile, out var obj))
+                    if (location.objects.TryGetValue(tile, out var obj) && obj.IsWeeds())
                     {
-                        if (obj.IsWeeds())
-                        {
-                            obj.performToolAction(weapon);
-                            location.objects.Remove(tile);
-                            Game1.playSound("cut");
-                            Game1.createObjectDebris("771", (int)tile.X, (int)tile.Y, Game1.player.UniqueMultiplayerID);
-                        }
+                        obj.performToolAction(weapon);
+                        location.objects.Remove(tile);
+                        Game1.playSound("cut");
+                        Game1.createObjectDebris("771", (int)tile.X, (int)tile.Y, player.UniqueMultiplayerID);
                     }
 
-                    // Cut tall grass (terrain features)
+                    // Cut grass (terrain features)
                     if (location.terrainFeatures.TryGetValue(tile, out var feature) && feature is Grass grass)
                     {
+                        // Determine hay drop chance based on scythe type
+                        double hayDropChance = isRegularScythe ? 0.5 : isGoldenScythe ? 0.75 : isIridiumScythe ? 1.0 : 0.0;
+
+                        // Attempt to add hay to silos based on drop chance
+                        if (random.NextDouble() < hayDropChance)
+                        {
+                            Game1.getFarm().tryToAddHay(1);
+
+                            
+                            int numSprites = 1;
+                            double rotationSpeed = 0;
+                            double baseRotation = 0;
+
+                            TemporaryAnimatedSprite hay = new TemporaryAnimatedSprite();
+
+                        
+                            float orbitRadius = 48.0f;  //48
+
+
+                            float offsetX = (float)Math.Cos(0.0) * orbitRadius;
+                            float offsetY = (float)Math.Sin(0.0) * orbitRadius;
+                            Vector2 orbitPos = tile + new Vector2(offsetX, offsetY);
+
+                            string tileSheet = "Maps\\springobjects";
+
+                            Rectangle sourceRect = new Rectangle(160, 112, 16, 16);
+
+
+                            hay = new TemporaryAnimatedSprite(
+                                tileSheet,
+                                sourceRect, // First sword sprite
+                                100f, 1, 1, orbitPos, flicker: false, flipped: false)
+                                {
+                                    rotation = (float)0.0,
+                                    alpha = 0.4f,
+                                    scale = 1.0f,
+                                    motion = Vector2.Zero,
+                                    layerDepth = 1f
+                                };
+
+                            if (hay != null)
+                            {
+
+                                Game1.currentLocation.temporarySprites.Add(hay);
+                            }
+
+
+                                
+                                // StoreHayInAnySilo returns the amount of hay stored; if 0, silos are full
+                                int hayStored = GameLocation.StoreHayInAnySilo(1, location);
+                            if (hayStored >= 1)
+                            {
+                                Game1.showRedMessage("Silos are full. Cannot store more hay.");
+                            }
+                        }
+
+                        // Reduce or remove grass
                         if (grass.reduceBy(1, true))
                         {
                             location.terrainFeatures.Remove(tile);
                         }
                         Game1.playSound("cut");
                     }
+
+                    // Harvest crops if using Iridium Scythe
+                    if (isIridiumScythe)
+                    {
+                        if (location.terrainFeatures.TryGetValue(tile, out var terrainFeature) && terrainFeature is HoeDirt hoeDirt)
+                        {
+                            if (hoeDirt.crop != null && hoeDirt.readyForHarvest())
+                            {
+                                // Harvest the crop; the method returns a bool indicating success
+                                bool harvested = hoeDirt.crop.harvest((int)tile.X, (int)tile.Y, hoeDirt, null, true);
+                                if (harvested)
+                                {
+                                    hoeDirt.destroyCrop(showAnimation: true);
+                                    Game1.playSound("harvest");
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+
+
+
 
         private void SpawnWeaponEffect(int radius)
         {
