@@ -200,7 +200,7 @@ namespace SpinningWeaponAndToolMod
     public partial class ModEntry : Mod
     {
         private List<string> modIds = new(); // Initialize to avoid null error
-
+        private ITranslationHelper i18n;
         public static ModEntry Instance { get; private set; }
         private bool startSpinAnimation = false;
         private int staminaDrainCounter = 0;
@@ -219,7 +219,7 @@ namespace SpinningWeaponAndToolMod
         public override void Entry(IModHelper helper)
         {
 
-
+            this.i18n = helper.Translation;
             Instance = this;
             Config = helper.ReadConfig<ModConfig>();
             var harmony = new Harmony(ModManifest.UniqueID);
@@ -565,7 +565,7 @@ namespace SpinningWeaponAndToolMod
                                 int hayStored = GameLocation.StoreHayInAnySilo(1, location);
                             if (hayStored >= 1)
                             {
-                                Game1.showRedMessage("Silos are full. Cannot store more hay.");
+                                Game1.showRedMessage(i18n.Get("ModEntry.Cs-showRedMessage.SiloAreFull"));
                             }
                         }
 
@@ -904,40 +904,40 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "When selecting a tool or weapon, rightclick {hotkey configurable} to spin, and leftclick{hotkey configurable} if spin gets stucks. You can set the base stamina drain. The stamina drain reduces by 0.1 cost per skill level. Example: level 10 combat will reduce stamina drain when using weapons/tools"
+                text: () => i18n.Get("config.description")
             );
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "------------------------Hotkeys Settings------------------------"
+                text: () => i18n.Get("hotkeys.section")
             );
             gmcm.AddKeybind(
                 ModManifest,
-                name: () => "Spin Hotkey",
-                tooltip: () => "Hold a weapon or tool and press this hotkey to use the spinning skill",
+                name: () => i18n.Get("hotkeys.spin.name"),
+                tooltip: () => i18n.Get("hotkeys.spin.tooltip"),
                 getValue: () => Config.SpinHotkey,
                 setValue: value => Config.SpinHotkey = value
             );
 
             gmcm.AddKeybind(
                 ModManifest,
-                name: () => "Spin Hotkey Controller",
-                tooltip: () => "Spin Hotkey for controller, holding this will spin with weapon or tool",
+                name: () => i18n.Get("hotkeys.spin_controller.name"),
+                tooltip: () => i18n.Get("hotkeys.spin_controller.tooltip"),
                 getValue: () => Config.SpinHotkeyController,
                 setValue: value => Config.SpinHotkeyController = value
             );
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "------------------------Weapon+Tool Settings------------------------"
+                text: () => i18n.Get("weapons_tools.section")
             );
 
             gmcm.AddNumberOption(
                 mod: ModManifest,
                 getValue: () => Config.BaseStaminaDrain,
                 setValue: value => Config.BaseStaminaDrain = value,
-                name: () => "Stamina Drain",
-                tooltip: () => "Set how much stamina drains when spinning",
+                name: () => i18n.Get("weapons_tools.stamina_drain.name"),
+                tooltip: () => i18n.Get("weapons_tools.stamina_drain.tooltip"),
                 min: 0.0f,
                 max: 10.0f,
                 interval: 0.1f
@@ -947,8 +947,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.numberOfSpinningSprite,
                 setValue: value => Config.numberOfSpinningSprite = value,
-                name: () => "Number of Spinning Sprite",
-                tooltip: () => "Lower for better performance, higher for better quality, default = 5",
+                name: () => i18n.Get("weapons_tools.spin_sprites.name"),
+                tooltip: () => i18n.Get("weapons_tools.spin_sprites.tooltip"),
                 min: 3,
                 max: 20,
                 interval: 1
@@ -958,7 +958,7 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "------------------------Weapon Settings------------------------"
+                text: () => i18n.Get("weapons.section")
             );
 
 
@@ -966,8 +966,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.reduceStaminaDrainForWeaponsPerLevel,
                 setValue: value => Config.reduceStaminaDrainForWeaponsPerLevel = value,
-                name: () => "Reduce Stamina Drain Per Level",
-                tooltip: () => "Reduce Stamina Drain when using spinning weapons by this amount per Combat Skill level",
+                name: () => i18n.Get("weapons.stamina_reduction.name"),
+                tooltip: () => i18n.Get("weapons.stamina_reduction.tooltip"),
                 min: 0.00f,
                 max: 1.0f,
                 interval: 0.01f
@@ -977,8 +977,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.weaponSpinRadius,
                 setValue: value => Config.weaponSpinRadius = value,
-                name: () => "Other Weapon Base Spin Radius",
-                tooltip: () => "Set Other weapon type base Spin Radius. Applies to scythes and other weaponType if used in other mods",
+                name: () => i18n.Get("weapons.other_spin_radius.name"),
+                tooltip: () => i18n.Get("weapons.other_spin_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -988,8 +988,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.swordSpinRadius,
                 setValue: value => Config.swordSpinRadius = value,
-                name: () => "Sword Base Spin Radius",
-                tooltip: () => "Set Sword base Spin Radius",
+                name: () => i18n.Get("weapons.sword_spin_radius.name"),
+                tooltip: () => i18n.Get("weapons.sword_spin_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -999,8 +999,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.daggerSpinRadius,
                 setValue: value => Config.daggerSpinRadius = value,
-                name: () => "Dagger Base Spin Radius",
-                tooltip: () => "Set Dagger Base Spin Radius",
+                name: () => i18n.Get("weapons.dagger_spin_radius.name"),
+                tooltip: () => i18n.Get("weapons.dagger_spin_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -1010,8 +1010,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.hammerSpinRadius,
                 setValue: value => Config.hammerSpinRadius = value,
-                name: () => "Hammer base Spin Radius",
-                tooltip: () => "Set Hammer BaseSpin Radius",
+                name: () => i18n.Get("weapons.hammer_spin_radius.name"),
+                tooltip: () => i18n.Get("weapons.hammer_spin_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -1021,8 +1021,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.allWeaponSpinPercentDamage,
                 setValue: value => Config.allWeaponSpinPercentDamage = value,
-                name: () => "All Weapon Percent Damage",
-                tooltip: () => "Set a percentage value of the weapon's base damage that should be applied to spin damage. Example if set to .50 only deals 50% of weapon damage per spin",
+                name: () => i18n.Get("weapons.damage_percent.name"),
+                tooltip: () => i18n.Get("weapons.damage_percent.tooltip"),
                 min: 0.01f,
                 max: 1.0f,
                 interval: 0.01f
@@ -1032,8 +1032,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.numberOfWeaponSpinHitsPerSecond,
                 setValue: value => Config.numberOfWeaponSpinHitsPerSecond = value,
-                name: () => "Weapon Spin Hit Per Sec",
-                tooltip: () => "Number of times Spin attack hits monster per second",
+                name: () => i18n.Get("weapons.hits_per_second.name"),
+                tooltip: () => i18n.Get("weapons.hits_per_second.tooltip"),
                 min: 1,
                 max: 60,
                 interval: 1
@@ -1042,7 +1042,7 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "------------------------Pickaxe Settings------------------------"
+                text: () => i18n.Get("pickaxe.section")
             );
 
 
@@ -1050,8 +1050,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.reduceStaminaDrainForPickaxePerLevel,
                 setValue: value => Config.reduceStaminaDrainForPickaxePerLevel = value,
-                name: () => "Reduce Stamina Drain Per Level",
-                tooltip: () => "Reduce Stamina Drain when using spinning pickaxe by this amount per minning Skill level",
+                name: () => i18n.Get("pickaxe.stamina_reduction.name"),
+                tooltip: () => i18n.Get("pickaxe.stamina_reduction.tooltip"),
                 min: 0.00f,
                 max: 1.0f,
                 interval: 0.01f
@@ -1061,8 +1061,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.pickaxeSpinRadius,
                 setValue: value => Config.pickaxeSpinRadius = value,
-                name: () => "Pickaxe base spin Radius",
-                tooltip: () => "Set Pickaxe base Spin Radius",
+                name: () => i18n.Get("pickaxe.spin_radius.name"),
+                tooltip: () => i18n.Get("pickaxe.spin_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -1072,8 +1072,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.numberOfPickaxeSpinHitsPerSecond,
                 setValue: value => Config.numberOfPickaxeSpinHitsPerSecond = value,
-                name: () => "Pickaxe Spin Hit Per Sec",
-                tooltip: () => "Number of times pickaxe spin attack hits area per second",
+                name: () => i18n.Get("pickaxe.hits_per_second.name"),
+                tooltip: () => i18n.Get("pickaxe.hits_per_second.tooltip"),
                 min: 1,
                 max: 60,
                 interval: 1
@@ -1083,8 +1083,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel,
                 setValue: value => Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel = value,
-                name: () => "Spin Radius per Tool Upgrade",
-                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additional radius unless 2 tool upgrade is done. Upgrade tool levels are: Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4",
+                name: () => i18n.Get("pickaxe.radius_per_upgrade.name"),
+                tooltip: () => i18n.Get("pickaxe.radius_per_upgrade.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1095,8 +1095,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.pickaxeEnchantSwift,
                 setValue: value => Config.pickaxeEnchantSwift = value,
-                name: () => "Swift Enchant Grants Bonus Hits Per Second",
-                tooltip: () => "Number of bonus hits the pickaxe does if axe has the enchant Swift",
+                name: () => i18n.Get("pickaxe.swift_bonus_hits.name"),
+                tooltip: () => i18n.Get("pickaxe.swift_bonus_hits.tooltip"),
                 min: 1,
                 max: 60,
                 interval: 1
@@ -1105,7 +1105,7 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "------------------------Axe Settings------------------------"
+                text: () => i18n.Get("axe.section")
             );
 
 
@@ -1113,8 +1113,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.reduceStaminaDrainForAxePerLevel,
                 setValue: value => Config.reduceStaminaDrainForAxePerLevel = value,
-                name: () => "Reduce Stamina Drain Per Level",
-                tooltip: () => "Reduce Stamina Drain when using spinning axe by this amount per Foraging Skill level",
+                name: () => i18n.Get("axe.stamina_reduction.name"),
+                tooltip: () => i18n.Get("axe.stamina_reduction.tooltip"),
                 min: 0.00f,
                 max: 1.0f,
                 interval: 0.01f
@@ -1123,8 +1123,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.axeSpinRadius,
                 setValue: value => Config.axeSpinRadius = value,
-                name: () => "Axe base Spin Radius",
-                tooltip: () => "Set Axe Max Spin Radius",
+                name: () => i18n.Get("axe.spin_radius.name"),
+                tooltip: () => i18n.Get("axe.spin_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -1134,8 +1134,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel,
                 setValue: value => Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel = value,
-                name: () => "Increase Radius per Tool Upgrade",
-                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additiona radius unless 2 tool upgrade is done. Upgrade tool levels are Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4 and does not limit here if other mod adds higher tool level",
+                name: () => i18n.Get("axe.radius_per_upgrade.name"),
+                tooltip: () => i18n.Get("axe.radius_per_upgrade.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1145,8 +1145,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.numberOfAxeSpinHitsPerSecond,
                 setValue: value => Config.numberOfAxeSpinHitsPerSecond = value,
-                name: () => "Axe Spin Hit Per Sec",
-                tooltip: () => "Number of times axe spin attack hits area per second",
+                name: () => i18n.Get("axe.hits_per_second.name"),
+                tooltip: () => i18n.Get("axe.hits_per_second.tooltip"),
                 min: 1,
                 max: 60,
                 interval: 1
@@ -1156,8 +1156,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.axeEnchantSwift,
                 setValue: value => Config.axeEnchantSwift = value,
-                name: () => "Swift Enchant Grants Bonus Hits Per Second",
-                tooltip: () => "Number of bonus hits the axe does if axe has the enchant Swift",
+                name: () => i18n.Get("axe.swift_bonus_hits.name"),
+                tooltip: () => i18n.Get("axe.swift_bonus_hits.tooltip"),
                 min: 1,
                 max: 60,
                 interval: 1
@@ -1166,15 +1166,15 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "------------------------Watering Can Settings------------------------"
+                text: () => i18n.Get("watering_can.section")
             );
 
             gmcm.AddNumberOption(
                 mod: ModManifest,
                 getValue: () => Config.wateringcanRadius,
                 setValue: value => Config.wateringcanRadius = value,
-                name: () => "Watering Can Base Radius",
-                tooltip: () => "Set base watering can radius",
+                name: () => i18n.Get("watering_can.base_radius.name"),
+                tooltip: () => i18n.Get("watering_can.base_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -1184,8 +1184,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel,
                 setValue: value => Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel = value,
-                name: () => " Radius per Tool Upgrade",
-                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additiona radius unless 2 tool upgrade is done. Upgrade tool levels are Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4 and does not limit here if other mod adds higher tool level",
+                name: () => i18n.Get("watering_can.radius_per_upgrade.name"),
+                tooltip: () => i18n.Get("watering_can.radius_per_upgrade.tooltip"),
                 min: 1.0f,
                 max: 2.0f,
                 interval: 0.1f
@@ -1194,8 +1194,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.reduceStaminaDrainForWateringCanPerLevel,
                 setValue: value => Config.reduceStaminaDrainForWateringCanPerLevel = value,
-                name: () => "Reduced Stamina Cost Per Level",
-                tooltip: () => "Reduce stamina cost per level by this amount",
+                name: () => i18n.Get("watering_can.stamina_reduction.name"),
+                tooltip: () => i18n.Get("watering_can.stamina_reduction.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1205,8 +1205,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.wateringcanEnchantReaching,
                 setValue: value => Config.wateringcanEnchantReaching = value,
-                name: () => "Enchant: Reaching -Add Radius",
-                tooltip: () => "Increase tool radius by this amount if tool has the enchant reaching",
+                name: () => i18n.Get("watering_can.reaching_bonus_radius.name"),
+                tooltip: () => i18n.Get("watering_can.reaching_bonus_radius.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1216,8 +1216,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.wateringcanEnchantEfficient,
                 setValue: value => Config.wateringcanEnchantEfficient = value,
-                name: () => "Enchant:Efficient reduce Stamina Cost",
-                tooltip: () => "Reduce stamina cost by this amount if tool has the enchant Efficient",
+                name: () => i18n.Get("wateringcan.enchant_efficient.name"),
+                tooltip: () => i18n.Get("wateringcan.enchant_efficient.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1225,15 +1225,15 @@ namespace SpinningWeaponAndToolMod
 
             gmcm.AddParagraph(
                 ModManifest,
-                text: () => "------------------------Hoe Settings------------------------"
+                text: () => i18n.Get("hoe.section")
             );
 
             gmcm.AddNumberOption(
                 mod: ModManifest,
                 getValue: () => Config.HoeRadius,
                 setValue: value => Config.HoeRadius = value,
-                name: () => "Hoe Base Radius",
-                tooltip: () => "Set base Hoe radius",
+                name: () => i18n.Get("hoe.base_radius.name"),
+                tooltip: () => i18n.Get("hoe.base_radius.tooltip"),
                 min: 1,
                 max: 20,
                 interval: 1
@@ -1243,8 +1243,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel,
                 setValue: value => Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel = value,
-                name: () => "Radius per Tool Upgrade",
-                tooltip: () => "Increase the Spin Radius amount by this value Per each tool Upgrade. Only whole number increases will add an increase radius so 0.5 value upgrade won't add 1 additiona radius unless 2 tool upgrade is done. Upgrade tool levels are Base tool = 0, copper = 1, iron = 2, gold = 3, iridium = 4 and does not limit here if other mod adds higher tool level",
+                name: () => i18n.Get("hoe.radius_per_upgrade.name"),
+                tooltip: () => i18n.Get("hoe.radius_per_upgrade.tooltip"),
                 min: 1.0f,
                 max: 2.0f,
                 interval: 0.1f
@@ -1253,8 +1253,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.reduceStaminaDrainForHoePerLevel,
                 setValue: value => Config.reduceStaminaDrainForHoePerLevel = value,
-                name: () => "Reduced Stamina Cost Per Level",
-                tooltip: () => "Reduce stamina cost per level by this amount",
+                name: () => i18n.Get("hoe.reduced_stamina_per_level.name"),
+                tooltip: () => i18n.Get("hoe.reduced_stamina_per_level.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1264,8 +1264,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.HoeEnchantReaching,
                 setValue: value => Config.HoeEnchantReaching = value,
-                name: () => "Enchant: Reaching -Add Radius",
-                tooltip: () => "Increase tool radius by this amount if tool has the enchant reaching",
+                name: () => i18n.Get("hoe.enchant_reaching.name"),
+                tooltip: () => i18n.Get("hoe.enchant_reaching.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1275,8 +1275,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.HoeEnchantEfficient,
                 setValue: value => Config.HoeEnchantEfficient = value,
-                name: () => "Enchant:Efficient reduce Stamina Cost",
-                tooltip: () => "Reduce stamina cost by this amount if tool has the enchant Efficient",
+                name: () => i18n.Get("hoe.enchant_efficient.name"),
+                tooltip: () => i18n.Get("hoe.enchant_efficient.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f
@@ -1286,8 +1286,8 @@ namespace SpinningWeaponAndToolMod
                 mod: ModManifest,
                 getValue: () => Config.HoeEnchantSwift,
                 setValue: value => Config.HoeEnchantSwift = value,
-                name: () => "Enchant:Swift more hits",
-                tooltip: () => "tool hits hits more times per second if tool has the swift enchant",
+                name: () => i18n.Get("hoe.enchant_swift.name"),
+                tooltip: () => i18n.Get("hoe.enchant_swift.tooltip"),
                 min: 0.0f,
                 max: 3.0f,
                 interval: 0.1f

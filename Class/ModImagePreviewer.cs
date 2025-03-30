@@ -16,6 +16,7 @@ namespace SpinningWeaponAndToolMod
 {
     public class ModImagePreviewer : IClickableMenu
     {
+
         private enum PreviewState { SelectMod, SelectImage, Preview }
         private static Rectangle backButtonRect = new Rectangle(50, 50, 120, 60);
         private int scrollOffset = 0;
@@ -40,18 +41,20 @@ namespace SpinningWeaponAndToolMod
         private static PreviewState state = PreviewState.SelectMod;
         public static ModEntry Instance { get; set; }
         public static ModConfig Config { get; set; }
+        public static ITranslationHelper i18n;
 
         public static void Open()
         {
             modIds = ModEntry.Instance.Helper.ModRegistry.GetAll().Select(m => m.Manifest.UniqueID).OrderBy(s => s).ToList();
             state = PreviewState.SelectMod;
             
-            Game1.activeClickableMenu = new ModImagePreviewer(Instance, Config);
+            Game1.activeClickableMenu = new ModImagePreviewer(Instance, Config, i18n);
         }
 
 
-        public ModImagePreviewer(ModEntry instance, ModConfig config)
+        public ModImagePreviewer(ModEntry instance, ModConfig config, ITranslationHelper i18nn)
         {
+            i18n = i18nn;
             Config = config;
             Instance = instance;
             populateModList();
@@ -222,7 +225,8 @@ namespace SpinningWeaponAndToolMod
                             }
                             catch (Exception ex)
                             {
-                                Game1.addHUDMessage(new HUDMessage("Failed to load image: " + ex.Message, 3));
+                                
+                                Game1.addHUDMessage(new HUDMessage(i18n.Get("ModImagePreviewer.Cs-AddHudMessage.FailedToLoadImage") + ex.Message, 3));
                                 ModEntry.Instance.Monitor.Log($"Error loading texture from mod '{selectedMod}': {ex}", LogLevel.Error);
                             }
                             return;
@@ -234,7 +238,7 @@ namespace SpinningWeaponAndToolMod
                     {
                         if (lastHoveredSourceRect is not Rectangle rect)
                         {
-                            Game1.addHUDMessage(new HUDMessage("No tile selected", HUDMessage.error_type));
+                            Game1.addHUDMessage(new HUDMessage(i18n.Get("ModImagePreviewer.Cs-AddHudMessage.NoTileSelected"), HUDMessage.error_type));
                             return;
                         }
 
@@ -298,7 +302,7 @@ namespace SpinningWeaponAndToolMod
                         Config.weaponSpriteData.Add(newEntry);
                         ModEntry.Instance.Helper.WriteConfig(Config);
 
-                        Game1.addHUDMessage(new HUDMessage("Sprite saved and image registered!", HUDMessage.newQuest_type));
+                        Game1.addHUDMessage(new HUDMessage(i18n.Get("ModImagePreviewer.Cs-AddHudMessage.SpriteSaved"), HUDMessage.newQuest_type));
                         Game1.activeClickableMenu = null; // Exit the menu
                         return;
                     }

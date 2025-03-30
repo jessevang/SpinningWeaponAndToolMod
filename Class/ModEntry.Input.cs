@@ -25,7 +25,7 @@ namespace SpinningWeaponAndToolMod
 
             if (e.Button == SButton.F8)
             {
-                Game1.activeClickableMenu = new ModImagePreviewer(Instance, Config);
+                Game1.activeClickableMenu = new ModImagePreviewer(Instance, Config, i18n);
             }
 
 
@@ -297,7 +297,7 @@ namespace SpinningWeaponAndToolMod
             // Check if already exists in config
             if (Config.weaponSpriteData.Any(w => w.itemCategoryAndItemID == itemCategoryAndItemID))
             {
-                Monitor.Log($"Already in config: {itemKey}", LogLevel.Trace);
+                //Monitor.Log($"Already in config: {itemKey}", LogLevel.Trace);
                 return;
             }
 
