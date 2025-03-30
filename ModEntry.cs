@@ -21,7 +21,7 @@ namespace SpinningWeaponAndToolMod
     {
         //hotkeys
         public SButton SpinHotkey { get; set; } = SButton.MouseRight;
-        public SButton SpinHotkeyController { get; set; } = SButton.ControllerX;
+        public SButton SpinHotkeyController { get; set; } = SButton.ControllerA;
         
         //all tool and weapons
         public float BaseStaminaDrain { get; set; } = 3.0f;
