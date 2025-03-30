@@ -55,7 +55,7 @@
   "watering_can.stamina_reduction.name": "每级减少的耐力消耗",
   "watering_can.stamina_reduction.tooltip": "每级减少的耐力消耗量。",
   "watering_can.reaching_bonus_radius.name": "附魔：延伸 - 增加半径",
-  "watering_can.reaching_bonus_radius.tooltip": "增加洒水壶的作用范围，使您在应用“延伸”附魔时能够一次性浇水更大的区域。",
+  "watering_can.reaching_bonus_radius.tooltip": "增加洒水壶的作用省力，使您在应用“延伸”附魔时能够一次性浇水更大的区域。",
   "wateringcan.enchant_efficient.name": "附魔：高效 - 减少耐力消耗",
   "wateringcan.enchant_efficient.tooltip": "如果工具拥有高效附魔，则减少此数值的耐力消耗。",
   "hoe.section": "------------------------锄头设置------------------------",

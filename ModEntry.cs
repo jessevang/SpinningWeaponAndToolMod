@@ -59,7 +59,6 @@ namespace SpinningWeaponAndToolMod
 
         //watering can
         public float reduceStaminaDrainForWateringCanPerLevel { get; set; } = 0.1f;
-
         public float wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
         public int wateringcanRadius { get; set; } = 1;
         public float wateringcanEnchantEfficient { get; set; } = 1f;
@@ -71,9 +70,9 @@ namespace SpinningWeaponAndToolMod
         public int numberOfHoeSpinHitsPerSecond { get; set; } = 3;
         public float HoeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
         public int HoeRadius { get; set; } = 1;
-        public float HoeEnchantSwift{ get; set; } = 1f;
-        public float HoeEnchantEfficient { get; set; } = 1f;
-        public float HoeEnchantReaching { get; set; } = 1f;
+        public float HoeEnchantSwift{ get; set; } = 1.0f;
+        public float HoeEnchantEfficient { get; set; } = 1.0f;
+        public float HoeEnchantReaching { get; set; } = 1.0f;
 
 
 
@@ -1186,8 +1185,8 @@ namespace SpinningWeaponAndToolMod
                 setValue: value => Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel = value,
                 name: () => i18n.Get("watering_can.radius_per_upgrade.name"),
                 tooltip: () => i18n.Get("watering_can.radius_per_upgrade.tooltip"),
-                min: 1.0f,
-                max: 2.0f,
+                min: 0.0f,
+                max: 3.0f,
                 interval: 0.1f
             );
             gmcm.AddNumberOption(
@@ -1234,7 +1233,7 @@ namespace SpinningWeaponAndToolMod
                 setValue: value => Config.HoeRadius = value,
                 name: () => i18n.Get("hoe.base_radius.name"),
                 tooltip: () => i18n.Get("hoe.base_radius.tooltip"),
-                min: 1,
+                min: 0,
                 max: 20,
                 interval: 1
             );
@@ -1245,8 +1244,8 @@ namespace SpinningWeaponAndToolMod
                 setValue: value => Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel = value,
                 name: () => i18n.Get("hoe.radius_per_upgrade.name"),
                 tooltip: () => i18n.Get("hoe.radius_per_upgrade.tooltip"),
-                min: 1.0f,
-                max: 2.0f,
+                min: 0.0f,
+                max: 3.0f,
                 interval: 0.1f
             );
             gmcm.AddNumberOption(
