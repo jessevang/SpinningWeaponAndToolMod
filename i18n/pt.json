@@ -19,7 +19,7 @@
     "ability.SpinningWateringCan.desc": "Segure o botão direito do mouse ou o botão A do controle para girar o regador.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
 
     "ability.SpinningHoe.name": "Enxada giratória",
-    "ability.SpinningHoe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar a enxada.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1."
+    "ability.SpinningHoe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar a enxada.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
   
 
   "config.description": "Ao selecionar uma ferramenta ou arma, clique com o botão direito ({hotkey configurable}) para girar, e com o botão esquerdo ({hotkey configurable}) se o giro travar. Você pode definir o consumo base de energia. O consumo de energia é reduzido em 0,1 por nível de habilidade. Exemplo: nível 10 de combate reduzirá o consumo ao usar armas/ferramentas.",

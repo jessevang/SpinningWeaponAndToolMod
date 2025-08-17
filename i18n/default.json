@@ -18,7 +18,7 @@
   "ability.SpinningWateringCan.desc": "Unlocks the ability to spin your watering can by holding right click or Controller A.\nEvery Level: Reduce stamina cost by 10%. Even at Max Level a small amount of stamina will still be drained.\nEvery 5 Levels: Spin radius increased by 1.",
 
   "ability.SpinningHoe.name": "Spinning Hoe",
-  "ability.SpinningHoe.desc": "Unlocks the ability to spin your hoe by holding right click or Controller A.\nEvery Level: Reduce stamina cost by 10%. Even at Max Level a small amount of stamina will still be drained.\nEvery 5 Levels: Spin radius increased by 1."
+  "ability.SpinningHoe.desc": "Unlocks the ability to spin your hoe by holding right click or Controller A.\nEvery Level: Reduce stamina cost by 10%. Even at Max Level a small amount of stamina will still be drained.\nEvery 5 Levels: Spin radius increased by 1.",
   
 
   "config.description": "When selecting a tool or weapon, right-click {hotkey configurable} to spin, and left-click {hotkey configurable} if spin gets stuck. You can set the base stamina drain. The stamina drain reduces by 0.1 cost per skill level. Example: level 10 combat will reduce stamina drain when using weapons/tools.",
