@@ -24,7 +24,7 @@ namespace SpinningWeaponAndToolMod
             if (!Context.IsWorldReady)
                 return;
 
-            if (e.Button == SButton.F8)
+            if (Config.OpenSkinMenu.JustPressed())
             {
                 Game1.activeClickableMenu = new ModImagePreviewer(Instance, Config, i18n);
             }
@@ -33,7 +33,7 @@ namespace SpinningWeaponAndToolMod
             Tool tool = Game1.player.CurrentTool;
 
             
-            if ((e.Button == Config.SpinHotkey || e.Button == Config.SpinHotkeyController) && tool is not null &&
+            if ((Config.SpinHotkey.JustPressed()) && tool is not null &&
                 (tool is Pickaxe || tool is Axe || tool is WateringCan || tool is Hoe || (tool is MeleeWeapon weapon)))
             {
 
@@ -123,7 +123,7 @@ namespace SpinningWeaponAndToolMod
         {
             if (!Context.IsWorldReady) return;
 
-            if ((e.Button == Config.SpinHotkey || e.Button == Config.SpinHotkeyController) && isSpinning)
+            if ((Config.SpinHotkey.JustPressed()) && isSpinning)
             {
                 StopSpinning();
             }
