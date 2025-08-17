@@ -215,6 +215,8 @@ namespace SpinningWeaponAndToolMod
         private ModConfig Config;
         private string lastItemKey = null;
 
+
+        private UnifiedExperienceSystem.IUnifiedExperienceAPI? uesApi;
         public override void Entry(IModHelper helper)
         {
 
@@ -892,6 +894,90 @@ namespace SpinningWeaponAndToolMod
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
+            registeredGMCM();
+            RegisterUES();
+
+        }
+
+        private void RegisterUES()
+        {
+            uesApi = Helper.ModRegistry.GetApi<UnifiedExperienceSystem.IUnifiedExperienceAPI>("Darkmushu.UnifiedExperienceSystem");
+
+            if (uesApi == null)
+            {
+                return;
+            }
+
+            uesApi.RegisterAbility(
+                modUniqueId: this.ModManifest.UniqueID,
+                abilityId: "SpinningWeapon",
+                displayName: "Spinning Weapons",
+                description: "Unlocks ability to spin your weapon or scythe by holding right click or Controll A button. \nEvery Level: Reduce stamina cost by 10% .\nEvery 5 Levels: Spin Radius Increased by 1",
+                curveKind: "linear",
+                curveData: new Dictionary<string, object>
+                {
+                    { "xpPerLevel", 1000 }
+                },
+                maxLevel: 10
+            );
+
+            uesApi.RegisterAbility(
+                modUniqueId: this.ModManifest.UniqueID,
+                abilityId: "SpinningAxe",
+                displayName: "Spinning Axe",
+                description: "Unlocks ability to spin your axe by holding right click or Controll A button. \nEvery Level: Reduce stamina cost by 10% .\nEvery 5 Levels: Spin Radius Increased by 1",
+                curveKind: "linear",
+                curveData: new Dictionary<string, object>
+                {
+                    { "xpPerLevel", 1000 }
+                },
+                maxLevel: 10
+            );
+
+            uesApi.RegisterAbility(
+                modUniqueId: this.ModManifest.UniqueID,
+                abilityId: "SpinningPickAxe",
+                displayName: "Spinning Pickaxe",
+                description: "Unlocks ability to spin your pickaxe by holding right click or Controll A button. \nEvery Level: Reduce stamina cost by 10% .\nEvery 5 Levels: Spin Radius Increased by 1",
+                curveKind: "linear",
+                curveData: new Dictionary<string, object>
+                {
+                    { "xpPerLevel", 1000 }
+                },
+                maxLevel: 10
+            );
+
+
+            uesApi.RegisterAbility(
+                modUniqueId: this.ModManifest.UniqueID,
+                abilityId: "SpinningWateringCan",
+                displayName: "Spinning Watering Can",
+                description: "Unlocks ability to spin your watering can by holding right click or Controll A button.",
+                curveKind: "linear",
+                curveData: new Dictionary<string, object>
+                {
+                    { "xpPerLevel", 1500 }
+                },
+                maxLevel: 1
+            );
+
+            uesApi.RegisterAbility(
+                modUniqueId: this.ModManifest.UniqueID,
+                abilityId: "SpinningPickAxe",
+                displayName: "Spinning Hoe",
+                description: "Unlocks ability to spin your hoe by holding right click or Controll A button.",
+                curveKind: "linear",
+                curveData: new Dictionary<string, object>
+                {
+                    { "xpPerLevel", 1500 }
+                },
+                maxLevel: 1
+            );
+
+        }
+
+        private void registeredGMCM()
+        {
 
             // Uses Generic Mod Config Menu API to build a config UI.
             var gmcm = Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
@@ -1291,7 +1377,6 @@ namespace SpinningWeaponAndToolMod
                 max: 3.0f,
                 interval: 0.1f
             );
-
 
 
 
