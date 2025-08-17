@@ -1,28 +1,39 @@
 ﻿// All using directives stay the same
+using GenericModConfigMenu;
+using HarmonyLib;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.Tools;
-using Microsoft.Xna.Framework;
+using StardewValley.Enchantments;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
-using GenericModConfigMenu;
-using Microsoft.Xna.Framework.Graphics;
-using StardewValley.Enchantments;
+using StardewValley.Tools;
 using xTile.Tiles;
 using static StardewValley.Minigames.CraneGame;
 using static System.Net.Mime.MediaTypeNames;
-using HarmonyLib;
 
 
 namespace SpinningWeaponAndToolMod
 {
     public class ModConfig
     {
+        //Mode
+        public string Mode { get; set; } = "UnifiedExperience";
+
         //hotkeys
-        public SButton SpinHotkey { get; set; } = SButton.MouseRight;
-        public SButton SpinHotkeyController { get; set; } = SButton.ControllerA;
-        
+        public KeybindList SpinHotkey { get; set; } = new(
+            new Keybind(SButton.MouseRight),
+            new Keybind(SButton.ControllerA)
+        );
+
+        public KeybindList OpenSkinMenu { get; set; } = new(
+            new Keybind(SButton.F8),
+            new Keybind(SButton.RightShoulder, SButton.LeftStick)
+        );
+
         //all tool and weapons
         public float BaseStaminaDrain { get; set; } = 3.0f;
         public float reduceStaminaDrainForWeaponsPerLevel { get; set; } = 0.1f;
@@ -214,6 +225,15 @@ namespace SpinningWeaponAndToolMod
         private int facingDirectionIndex = 0;
         private ModConfig Config;
         private string lastItemKey = null;
+
+
+        //API Levels
+        private int SpinningWeaponLevel;
+        private int SpinningAxeLevel;
+        private int SpinningPickAxeLevel;
+        private int SpinningWateringCanLevel;
+        private int SpinningHoeLevel;
+
 
 
         private UnifiedExperienceSystem.IUnifiedExperienceAPI? uesApi;
@@ -894,7 +914,7 @@ namespace SpinningWeaponAndToolMod
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            registeredGMCM();
+            registerGMCM();
             RegisterUES();
 
         }
@@ -909,74 +929,59 @@ namespace SpinningWeaponAndToolMod
             }
 
             uesApi.RegisterAbility(
-                modUniqueId: this.ModManifest.UniqueID,
-                abilityId: "SpinningWeapon",
-                displayName: "Spinning Weapons",
-                description: "Unlocks ability to spin your weapon or scythe by holding right click or Controll A button. \nEvery Level: Reduce stamina cost by 10% .\nEvery 5 Levels: Spin Radius Increased by 1",
-                curveKind: "linear",
-                curveData: new Dictionary<string, object>
-                {
-                    { "xpPerLevel", 1000 }
-                },
-                maxLevel: 10
-            );
+                 modUniqueId: this.ModManifest.UniqueID,
+                 abilityId: "SpinningWeapon",
+                 displayName: Helper.Translation.Get("ability.SpinningWeapon.name"),
+                 description: Helper.Translation.Get("ability.SpinningWeapon.desc"),
+                 curveKind: "linear",
+                 curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
+                 maxLevel: 10
+             );
 
             uesApi.RegisterAbility(
                 modUniqueId: this.ModManifest.UniqueID,
                 abilityId: "SpinningAxe",
-                displayName: "Spinning Axe",
-                description: "Unlocks ability to spin your axe by holding right click or Controll A button. \nEvery Level: Reduce stamina cost by 10% .\nEvery 5 Levels: Spin Radius Increased by 1",
+                displayName: Helper.Translation.Get("ability.SpinningAxe.name"),
+                description: Helper.Translation.Get("ability.SpinningAxe.desc"),
                 curveKind: "linear",
-                curveData: new Dictionary<string, object>
-                {
-                    { "xpPerLevel", 1000 }
-                },
+                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
                 maxLevel: 10
             );
 
             uesApi.RegisterAbility(
                 modUniqueId: this.ModManifest.UniqueID,
                 abilityId: "SpinningPickAxe",
-                displayName: "Spinning Pickaxe",
-                description: "Unlocks ability to spin your pickaxe by holding right click or Controll A button. \nEvery Level: Reduce stamina cost by 10% .\nEvery 5 Levels: Spin Radius Increased by 1",
+                displayName: Helper.Translation.Get("ability.SpinningPickAxe.name"),
+                description: Helper.Translation.Get("ability.SpinningPickAxe.desc"),
                 curveKind: "linear",
-                curveData: new Dictionary<string, object>
-                {
-                    { "xpPerLevel", 1000 }
-                },
+                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
                 maxLevel: 10
             );
-
 
             uesApi.RegisterAbility(
                 modUniqueId: this.ModManifest.UniqueID,
                 abilityId: "SpinningWateringCan",
-                displayName: "Spinning Watering Can",
-                description: "Unlocks ability to spin your watering can by holding right click or Controll A button.",
+                displayName: Helper.Translation.Get("ability.SpinningWateringCan.name"),
+                description: Helper.Translation.Get("ability.SpinningWateringCan.desc"),
                 curveKind: "linear",
-                curveData: new Dictionary<string, object>
-                {
-                    { "xpPerLevel", 1500 }
-                },
-                maxLevel: 1
+                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
+                maxLevel: 10
             );
 
             uesApi.RegisterAbility(
                 modUniqueId: this.ModManifest.UniqueID,
-                abilityId: "SpinningPickAxe",
-                displayName: "Spinning Hoe",
-                description: "Unlocks ability to spin your hoe by holding right click or Controll A button.",
+                abilityId: "SpinningHoe",
+                displayName: Helper.Translation.Get("ability.SpinningHoe.name"),
+                description: Helper.Translation.Get("ability.SpinningHoe.desc"),
                 curveKind: "linear",
-                curveData: new Dictionary<string, object>
-                {
-                    { "xpPerLevel", 1500 }
-                },
-                maxLevel: 1
+                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
+                maxLevel: 10
             );
+
 
         }
 
-        private void registeredGMCM()
+        private void registerGMCM()
         {
 
             // Uses Generic Mod Config Menu API to build a config UI.
@@ -996,7 +1001,18 @@ namespace SpinningWeaponAndToolMod
                 ModManifest,
                 text: () => i18n.Get("hotkeys.section")
             );
-            gmcm.AddKeybind(
+
+            gmcm.AddTextOption(
+                mod: ModManifest,
+                name: () => i18n.Get("config.mode.name"),
+                tooltip: () => i18n.Get("config.mode.tooltip"),
+                getValue: () => Config.Mode,
+                setValue: value => Config.Mode = value,
+                allowedValues: new[] { "Standalone", "UnifiedExperience" }
+            );
+
+
+            gmcm.AddKeybindList(
                 ModManifest,
                 name: () => i18n.Get("hotkeys.spin.name"),
                 tooltip: () => i18n.Get("hotkeys.spin.tooltip"),
@@ -1004,12 +1020,12 @@ namespace SpinningWeaponAndToolMod
                 setValue: value => Config.SpinHotkey = value
             );
 
-            gmcm.AddKeybind(
+            gmcm.AddKeybindList(
                 ModManifest,
-                name: () => i18n.Get("hotkeys.spin_controller.name"),
-                tooltip: () => i18n.Get("hotkeys.spin_controller.tooltip"),
-                getValue: () => Config.SpinHotkeyController,
-                setValue: value => Config.SpinHotkeyController = value
+                name: () => Helper.Translation.Get("gmcm.openMenu.name"),
+                tooltip: () => Helper.Translation.Get("gmcm.openMenu.tooltip"),
+                getValue: () => Config.OpenSkinMenu,
+                setValue: value => Config.OpenSkinMenu = value
             );
 
             gmcm.AddParagraph(

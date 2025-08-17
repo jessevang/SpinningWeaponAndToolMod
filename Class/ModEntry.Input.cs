@@ -1,15 +1,16 @@
-﻿using StardewModdingAPI.Events;
+﻿using HarmonyLib;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
-using StardewValley.Tools;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Enchantments;
+using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
-using StardewValley.Enchantments;
-using Microsoft.Xna.Framework;
 
 
 namespace SpinningWeaponAndToolMod
@@ -31,10 +32,80 @@ namespace SpinningWeaponAndToolMod
 
             Tool tool = Game1.player.CurrentTool;
 
+            
             if ((e.Button == Config.SpinHotkey || e.Button == Config.SpinHotkeyController) && tool is not null &&
                 (tool is Pickaxe || tool is Axe || tool is WateringCan || tool is Hoe || (tool is MeleeWeapon weapon)))
             {
-                isSpinning = true;
+
+                //If Unified Experience Mode is turned on and API is registered and reduce config stamina drain
+                if (GoodToRunUnifiedExperienceSystem())
+                {
+                    if (tool is Pickaxe)
+                    {
+                        SpinningPickAxeLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningPickaxe");
+                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningPickAxeLevel);
+                        Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel = 0f;
+                        Config.pickaxeSpinRadius = 1 + (int)(SpinningPickAxeLevel / 5);
+                        Config.reduceStaminaDrainForPickaxePerLevel = 0;
+                        if (SpinningPickAxeLevel >0)
+                            isSpinning = true;
+                    }
+
+                    else if (tool is Axe)
+                    {
+                        SpinningAxeLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningAxe");
+                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningAxeLevel);
+                        Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel = 0f;
+                        Config.axeSpinRadius = 1 + (int)(SpinningAxeLevel / 5);
+                        Config.reduceStaminaDrainForAxePerLevel = 0;
+                        if (SpinningAxeLevel > 0)
+                            isSpinning = true;
+                    }
+
+                    else if (tool is MeleeWeapon)
+                    {
+                        SpinningWeaponLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningWeapon");
+                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningWeaponLevel);
+                        Config.weaponSpinRadiusPerCombatLevel = 0f;
+                        Config.weaponSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
+                        Config.reduceStaminaDrainForWeaponsPerLevel = 0;
+                        if (SpinningWeaponLevel > 0)
+                            isSpinning = true;
+                    }
+
+                    else if (tool is WateringCan)
+                    {
+                        SpinningWateringCanLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningWateringCan");
+                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningWateringCanLevel);
+                        Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel = 0;
+                        Config.reduceStaminaDrainForWateringCanPerLevel = 0;
+                        Config.wateringcanRadius = 1 + (int)(SpinningWateringCanLevel / 5);
+                        if (SpinningWateringCanLevel > 0)
+                            isSpinning = true;
+                    }
+
+                    else if (tool is Hoe)
+                    {
+                        SpinningHoeLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningHoe");
+                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningHoeLevel);
+                        Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel = 0;
+                        Config.reduceStaminaDrainForHoePerLevel = 0;
+                        Config.wateringcanRadius = 1 + (int)(SpinningHoeLevel / 5);
+                        if (SpinningHoeLevel > 0)
+                            isSpinning = true;
+                    }
+
+
+
+
+                }
+                else //We still need to allow this to work even if not good to run unified experience system or as Standalone
+                {
+                    isSpinning = true;
+                }
+
+
+
                 weaponSpinTickCounter = 0;
                 axeSpinTickCounter = 0;
                 pickaxeSpinTickCounter = 0;
@@ -58,7 +129,15 @@ namespace SpinningWeaponAndToolMod
             }
         }
 
-  
+
+        public bool GoodToRunUnifiedExperienceSystem()
+        {
+            if (Config.Mode == "UnifiedExperience" && uesApi != null)
+            {
+                return true;
+            }
+            return false;
+        }
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
@@ -132,10 +211,12 @@ namespace SpinningWeaponAndToolMod
                 hoeSpinTickCounter++;
             }
 
-
-
             int maxWateringCanSpinTickCounter = 0;
             maxWateringCanSpinTickCounter = (60 / 3);
+
+            
+
+            
 
             if (wateringcanSpinTickCounter >= maxWateringCanSpinTickCounter && Game1.player.CurrentTool is WateringCan wateringCan)
             {
@@ -152,6 +233,7 @@ namespace SpinningWeaponAndToolMod
                 {
                     playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForWateringCanPerLevel) + Config.wateringcanEnchantEfficient;
                 }
+
                 Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel, 0.1f);
             }
 
@@ -260,6 +342,8 @@ namespace SpinningWeaponAndToolMod
                 {
                     Game1.player.Stamina = startStamina;
                     float playerCombatLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForWeaponsPerLevel;
+
+
                     Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerCombatLevel, 0.1f);
                     //Console.WriteLine($"playerCombatLevel  *.1: {playerCombatLevel} ");
                 }
