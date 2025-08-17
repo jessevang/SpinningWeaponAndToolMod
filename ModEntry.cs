@@ -933,8 +933,11 @@ namespace SpinningWeaponAndToolMod
                  abilityId: "SpinningWeapon",
                  displayName: Helper.Translation.Get("ability.SpinningWeapon.name"),
                  description: Helper.Translation.Get("ability.SpinningWeapon.desc"),
-                 curveKind: "linear",
-                 curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
+                 curveKind: "step",
+                 curveData: new Dictionary<string, object> { 
+                     { "base", 100 },
+                     { "step", 100 } 
+                 },
                  maxLevel: 10
              );
 
@@ -943,9 +946,12 @@ namespace SpinningWeaponAndToolMod
                 abilityId: "SpinningAxe",
                 displayName: Helper.Translation.Get("ability.SpinningAxe.name"),
                 description: Helper.Translation.Get("ability.SpinningAxe.desc"),
-                curveKind: "linear",
-                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
-                maxLevel: 10
+                 curveKind: "step",
+                 curveData: new Dictionary<string, object> {
+                     { "base", 100 },
+                     { "step", 100 }
+                 },
+                 maxLevel: 10
             );
 
             uesApi.RegisterAbility(
@@ -953,9 +959,12 @@ namespace SpinningWeaponAndToolMod
                 abilityId: "SpinningPickAxe",
                 displayName: Helper.Translation.Get("ability.SpinningPickAxe.name"),
                 description: Helper.Translation.Get("ability.SpinningPickAxe.desc"),
-                curveKind: "linear",
-                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
-                maxLevel: 10
+                 curveKind: "step",
+                 curveData: new Dictionary<string, object> {
+                     { "base", 100 },
+                     { "step", 100 }
+                 },
+                 maxLevel: 10
             );
 
             uesApi.RegisterAbility(
@@ -963,9 +972,12 @@ namespace SpinningWeaponAndToolMod
                 abilityId: "SpinningWateringCan",
                 displayName: Helper.Translation.Get("ability.SpinningWateringCan.name"),
                 description: Helper.Translation.Get("ability.SpinningWateringCan.desc"),
-                curveKind: "linear",
-                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
-                maxLevel: 10
+                 curveKind: "step",
+                 curveData: new Dictionary<string, object> {
+                     { "base", 100 },
+                     { "step", 100 }
+                 },
+                 maxLevel: 10
             );
 
             uesApi.RegisterAbility(
@@ -973,9 +985,12 @@ namespace SpinningWeaponAndToolMod
                 abilityId: "SpinningHoe",
                 displayName: Helper.Translation.Get("ability.SpinningHoe.name"),
                 description: Helper.Translation.Get("ability.SpinningHoe.desc"),
-                curveKind: "linear",
-                curveData: new Dictionary<string, object> { { "xpPerLevel", 100 } },
-                maxLevel: 10
+                 curveKind: "step",
+                 curveData: new Dictionary<string, object> {
+                     { "base", 100 },
+                     { "step", 100 }
+                 },
+                 maxLevel: 10
             );
 
 
