@@ -69,6 +69,9 @@ namespace SpinningWeaponAndToolMod
                         Config.weaponSpinRadiusPerCombatLevel = 0f;
                         Config.weaponSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
                         Config.reduceStaminaDrainForWeaponsPerLevel = 0;
+                        Config.swordSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
+                        Config.daggerSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
+                        Config.hammerSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
                         if (SpinningWeaponLevel > 0)
                             isSpinning = true;
                     }
@@ -123,7 +126,7 @@ namespace SpinningWeaponAndToolMod
         {
             if (!Context.IsWorldReady) return;
 
-            if ((Config.SpinHotkey.JustPressed()) && isSpinning)
+            if ((Config.SpinHotkey.GetState() == SButtonState.Released) && isSpinning)
             {
                 StopSpinning();
             }
