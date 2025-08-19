@@ -7,13 +7,10 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.Enchantments;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
-using xTile.Tiles;
-using static StardewValley.Minigames.CraneGame;
-using static System.Net.Mime.MediaTypeNames;
+
 
 
 namespace SpinningWeaponAndToolMod
@@ -36,15 +33,15 @@ namespace SpinningWeaponAndToolMod
 
         //all tool and weapons
         public float BaseStaminaDrain { get; set; } = 3.0f;
-        public float reduceStaminaDrainForWeaponsPerLevel { get; set; } = 0.1f;
+        public float reduceStaminaDrainForWeaponsPerLevel { get; set; } = 0.0f;
         public int numberOfSpinningSprite { get; set; } = 5;
 
         //weapons
-        public int weaponSpinRadius { get; set; } = 3;
-        public int swordSpinRadius { get; set; } = 2;
+        public int weaponSpinRadius { get; set; } = 1;
+        public int swordSpinRadius { get; set; } = 1;
         public int daggerSpinRadius { get; set; } = 1;
-        public int hammerSpinRadius {  get; set; } = 3;
-        public float weaponSpinRadiusPerCombatLevel { get; set; } = 0.2f;
+        public int hammerSpinRadius {  get; set; } = 1;
+        public float weaponSpinRadiusPerCombatLevel { get; set; } = 0.0f;
         public float allWeaponSpinPercentDamage { get; set; } = 1.0f;
         public int numberOfWeaponSpinHitsPerSecond { get; set; } = 3;
         public int numberOfSwordSpinHitsPerSecond { get; set; } = 4;
@@ -55,35 +52,35 @@ namespace SpinningWeaponAndToolMod
         public int axeSpinRadius { get; set; } = 1;
         public float axeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
         public int numberOfAxeSpinHitsPerSecond { get; set; } = 3;
-        public float axeEnchantEfficient { get; set; } = 1f;
-        public int axeEnchantSwift { get; set; } = 1;
-        public float reduceStaminaDrainForAxePerLevel { get; set; } = 0.1f;
+        public float axeEnchantEfficient { get; set; } = 0f;
+        public int axeEnchantSwift { get; set; } = 0;
+        public float reduceStaminaDrainForAxePerLevel { get; set; } = 0.0f;
 
         //pickaxe
         public int pickaxeSpinRadius { get; set; } = 1;
-        public int pickaxeEnchantSwift { get; set; } = 1; 
-        public float pickaxeEnchantEfficient { get; set; } = 1f; 
-        public float pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public int pickaxeEnchantSwift { get; set; } = 0; 
+        public float pickaxeEnchantEfficient { get; set; } = 0f; 
+        public float pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 0.0f;
         public int numberOfPickaxeSpinHitsPerSecond { get; set; } = 3;
-        public float reduceStaminaDrainForPickaxePerLevel { get; set; } = 0.1f;
+        public float reduceStaminaDrainForPickaxePerLevel { get; set; } = 0.0f;
 
 
         //watering can
-        public float reduceStaminaDrainForWateringCanPerLevel { get; set; } = 0.1f;
+        public float reduceStaminaDrainForWateringCanPerLevel { get; set; } = 0.0f;
         public float wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
         public int wateringcanRadius { get; set; } = 1;
-        public float wateringcanEnchantEfficient { get; set; } = 1f;
-        public float wateringcanEnchantReaching { get; set; } = 1f;
+        public float wateringcanEnchantEfficient { get; set; } = 0f;
+        public float wateringcanEnchantReaching { get; set; } = 0f;
 
 
         //Hoe
-        public float reduceStaminaDrainForHoePerLevel { get; set; } = 0.1f;
+        public float reduceStaminaDrainForHoePerLevel { get; set; } = 0.0f;
         public int numberOfHoeSpinHitsPerSecond { get; set; } = 3;
-        public float HoeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public float HoeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 0.0f;
         public int HoeRadius { get; set; } = 1;
-        public float HoeEnchantSwift{ get; set; } = 1.0f;
-        public float HoeEnchantEfficient { get; set; } = 1.0f;
-        public float HoeEnchantReaching { get; set; } = 1.0f;
+        public float HoeEnchantSwift{ get; set; } = 0.0f;
+        public float HoeEnchantEfficient { get; set; } = 0.0f;
+        public float HoeEnchantReaching { get; set; } = 0.0f;
 
 
 
@@ -233,10 +230,14 @@ namespace SpinningWeaponAndToolMod
         private int SpinningPickAxeLevel;
         private int SpinningWateringCanLevel;
         private int SpinningHoeLevel;
-
-
-
         private UnifiedExperienceSystem.IUnifiedExperienceAPI? uesApi;
+
+        //Ability Level Up settings
+        private float AbilityReduceStaminaDrainBy { get; set; } = 0;
+        private float AbilityIncreaseSpinRadiusBy{ get; set; } = 0;
+
+
+
         public override void Entry(IModHelper helper)
         {
 
@@ -303,47 +304,47 @@ namespace SpinningWeaponAndToolMod
                     {
                         case 3: // Sword
                             //Console.WriteLine($"Weapon is : {weapon.type.Value}");
-                            SpawnWeaponEffect(Config.swordSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            SpawnWeaponEffect((int)AbilityIncreaseSpinRadiusBy+ Config.swordSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             break;
 
                         case 1: // Dagger
                             //Console.WriteLine($"Weapon is : {weapon.type.Value}");
-                            SpawnWeaponEffect(Config.daggerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            SpawnWeaponEffect((int)AbilityIncreaseSpinRadiusBy + Config.daggerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             break;
 
                         case 2: // Club / Hammer
                             //Console.WriteLine($"Weapon is : {weapon.type.Value}");
-                            SpawnWeaponEffect(Config.hammerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            SpawnWeaponEffect((int)AbilityIncreaseSpinRadiusBy + Config.hammerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             break;
 
                         default:
                             //Console.WriteLine($"Weapon is : {weapon.type.Value}");
-                            SpawnWeaponEffect(Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            SpawnWeaponEffect((int)AbilityIncreaseSpinRadiusBy + Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             break;
                     }
                     break;
 
                 case Pickaxe pickaxe:
 
-                    SpawnToolEffect(pickaxe, (int)(Config.pickaxeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel));
+                    SpawnToolEffect(pickaxe, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.pickaxeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel));
                    
                     break;
 
                 case Axe axe:
 
-                    SpawnToolEffect(axe, (int)(Config.axeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel));
+                    SpawnToolEffect(axe, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.axeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel));
                   
                     break;
 
                 case WateringCan wateringcan:
 
-                    SpawnToolEffect(wateringcan, (int)(Config.wateringcanRadius + Game1.player.CurrentTool.UpgradeLevel * Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel));
+                    SpawnToolEffect(wateringcan, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.wateringcanRadius + Game1.player.CurrentTool.UpgradeLevel * Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel));
 
                     break;
                 
                 case Hoe hoe:
 
-                    SpawnToolEffect(hoe, (int)(Config.HoeRadius + Game1.player.CurrentTool.UpgradeLevel * Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel));
+                    SpawnToolEffect(hoe, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.HoeRadius + Game1.player.CurrentTool.UpgradeLevel * Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel));
 
                     break;
             }
@@ -365,25 +366,25 @@ namespace SpinningWeaponAndToolMod
                         case 3: // Sword
                             Game1.playSound("swordswipe");
                            
-                            ApplyWeaponEffect(weapon, center, Config.swordSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            ApplyWeaponEffect(weapon, center, (int)AbilityIncreaseSpinRadiusBy + Config.swordSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             break;
 
                         case 1: // Dagger
                             Game1.playSound("daggerswipe");
                            
-                            ApplyWeaponEffect(weapon, center, Config.daggerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            ApplyWeaponEffect(weapon, center, (int)AbilityIncreaseSpinRadiusBy + Config.daggerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             break;
 
                         case 2: // Club / Hammer
                             Game1.playSound("clubswipe");
                            
-                            ApplyWeaponEffect(weapon, center, Config.hammerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            ApplyWeaponEffect(weapon, center, (int)AbilityIncreaseSpinRadiusBy + Config.hammerSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             break;
 
                         default:
                             Game1.playSound("swordswipe");  //mainly for Scythe
                           
-                            ApplyWeaponEffect(weapon, center, Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
+                            ApplyWeaponEffect(weapon, center, (int)AbilityIncreaseSpinRadiusBy + Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             
                             
                             break;
@@ -393,25 +394,25 @@ namespace SpinningWeaponAndToolMod
                 case Pickaxe pickaxe:
                     Game1.playSound("clubswipe");
                    
-                    ApplyToolEffect(pickaxe, center, (int)(Config.pickaxeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel));
+                    ApplyToolEffect(pickaxe, center, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.pickaxeSpinRadius + Game1.player.CurrentTool.UpgradeLevel * Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel));
                     break;
 
                 case Axe axe:
                     Game1.playSound("clubswipe");
                    
-                    ApplyToolEffect(axe, center, (int)(Config.axeSpinRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel)));
+                    ApplyToolEffect(axe, center, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.axeSpinRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel)));
                     break;
 
                 case WateringCan wateringcan:
                     Game1.playSound("wateringCan");
 
-                    ApplyToolEffect(wateringcan, center, (int)(Config.wateringcanRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel)));
+                    ApplyToolEffect(wateringcan, center, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.wateringcanRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel)));
                     break;
 
                 case Hoe hoe:
                     Game1.playSound("hoeHit");
 
-                    ApplyToolEffect(hoe, center, (int)(Config.HoeRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel)));
+                    ApplyToolEffect(hoe, center, (int)AbilityIncreaseSpinRadiusBy + (int)(Config.HoeRadius + (Game1.player.CurrentTool.UpgradeLevel * Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel)));
                     break;
             }
         }

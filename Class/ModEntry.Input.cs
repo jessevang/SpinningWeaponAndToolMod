@@ -29,10 +29,19 @@ namespace SpinningWeaponAndToolMod
                 Game1.activeClickableMenu = new ModImagePreviewer(Instance, Config, i18n);
             }
 
+            startSpinning(false);
+
+        }
+
+        public void startSpinning(bool usedIconToTrigger)
+        {
+            //Return if world hasn't been loaded
+            if (!Context.IsWorldReady)
+                return;
 
             Tool tool = Game1.player.CurrentTool;
 
-            
+
             if ((Config.SpinHotkey.JustPressed()) && tool is not null &&
                 (tool is Pickaxe || tool is Axe || tool is WateringCan || tool is Hoe || (tool is MeleeWeapon weapon)))
             {
@@ -43,21 +52,20 @@ namespace SpinningWeaponAndToolMod
                     if (tool is Pickaxe)
                     {
                         SpinningPickAxeLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningPickaxe");
-                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningPickAxeLevel);
-                        Config.pickaxeSpinRadiusIncreaseByEachToolUpgradeLevel = 0f;
-                        Config.pickaxeSpinRadius = 1 + (int)(SpinningPickAxeLevel / 5);
+                        AbilityReduceStaminaDrainBy = Config.BaseStaminaDrain - ((Config.BaseStaminaDrain * 0.1f) * SpinningPickAxeLevel);
+                        AbilityIncreaseSpinRadiusBy = (int)(SpinningPickAxeLevel / 5);
+
                         Config.reduceStaminaDrainForPickaxePerLevel = 0;
-                        if (SpinningPickAxeLevel >0)
+                        if (SpinningPickAxeLevel > 0)
                             isSpinning = true;
                     }
 
                     else if (tool is Axe)
                     {
+
                         SpinningAxeLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningAxe");
-                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningAxeLevel);
-                        Config.axeSpinRadiusIncreaseByEachToolUpgradeLevel = 0f;
-                        Config.axeSpinRadius = 1 + (int)(SpinningAxeLevel / 5);
-                        Config.reduceStaminaDrainForAxePerLevel = 0;
+                        AbilityReduceStaminaDrainBy = Config.BaseStaminaDrain - ((Config.BaseStaminaDrain * 0.1f) * SpinningAxeLevel);
+                        AbilityIncreaseSpinRadiusBy = (int)(SpinningAxeLevel / 5);
                         if (SpinningAxeLevel > 0)
                             isSpinning = true;
                     }
@@ -65,13 +73,8 @@ namespace SpinningWeaponAndToolMod
                     else if (tool is MeleeWeapon)
                     {
                         SpinningWeaponLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningWeapon");
-                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningWeaponLevel);
-                        Config.weaponSpinRadiusPerCombatLevel = 0f;
-                        Config.weaponSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
-                        Config.reduceStaminaDrainForWeaponsPerLevel = 0;
-                        Config.swordSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
-                        Config.daggerSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
-                        Config.hammerSpinRadius = 1 + (int)(SpinningWeaponLevel / 5);
+                        AbilityReduceStaminaDrainBy = Config.BaseStaminaDrain - ((Config.BaseStaminaDrain * 0.1f) * SpinningWeaponLevel);
+                        AbilityIncreaseSpinRadiusBy = (int)(SpinningWeaponLevel / 5);
                         if (SpinningWeaponLevel > 0)
                             isSpinning = true;
                     }
@@ -79,10 +82,9 @@ namespace SpinningWeaponAndToolMod
                     else if (tool is WateringCan)
                     {
                         SpinningWateringCanLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningWateringCan");
-                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningWateringCanLevel);
-                        Config.wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel = 0;
-                        Config.reduceStaminaDrainForWateringCanPerLevel = 0;
-                        Config.wateringcanRadius = 1 + (int)(SpinningWateringCanLevel / 5);
+                        AbilityReduceStaminaDrainBy = Config.BaseStaminaDrain - ((Config.BaseStaminaDrain * 0.1f) * SpinningWateringCanLevel);
+                        AbilityIncreaseSpinRadiusBy = (int)(SpinningWateringCanLevel / 5);
+
                         if (SpinningWateringCanLevel > 0)
                             isSpinning = true;
                     }
@@ -90,10 +92,9 @@ namespace SpinningWeaponAndToolMod
                     else if (tool is Hoe)
                     {
                         SpinningHoeLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningHoe");
-                        Config.BaseStaminaDrain = 3.0f - (0.3f * SpinningHoeLevel);
-                        Config.HoeSpinRadiusIncreaseByEachToolUpgradeLevel = 0;
-                        Config.reduceStaminaDrainForHoePerLevel = 0;
-                        Config.wateringcanRadius = 1 + (int)(SpinningHoeLevel / 5);
+                        AbilityReduceStaminaDrainBy = Config.BaseStaminaDrain - ((Config.BaseStaminaDrain * 0.1f) * SpinningHoeLevel);
+                        AbilityIncreaseSpinRadiusBy = (int)(SpinningHoeLevel / 5);
+      
                         if (SpinningHoeLevel > 0)
                             isSpinning = true;
                     }
@@ -237,7 +238,7 @@ namespace SpinningWeaponAndToolMod
                     playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForWateringCanPerLevel) + Config.wateringcanEnchantEfficient;
                 }
 
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel, 0.1f);
+                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel - AbilityReduceStaminaDrainBy, 0.1f);
             }
 
 
