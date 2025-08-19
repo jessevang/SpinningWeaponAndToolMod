@@ -1,4 +1,8 @@
 {
+  "Icon.Spin.name": "武器・道具のスピン能力",
+  "Icon.Spin.tooltip": "クリックで現在の武器または道具をオン／オフ切り替え",
+
+
   "config.mode.name": "ゲームモード",
   "config.mode.tooltip": "Standalone = このMod単体で動作し、レベリングにUnifiedExperienceSystemを使用しません。UnifiedExperience = このモードでUnified Experience Systemが導入されている場合、回転を使うにはアビリティの習得が必要になります。また、このモードではスタミナ消費や半径などの設定が上書きされます。",
 

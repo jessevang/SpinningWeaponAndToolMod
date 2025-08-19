@@ -1,6 +1,7 @@
 ﻿// All using directives stay the same
 using GenericModConfigMenu;
 using HarmonyLib;
+using LeFauxMods.Common.Integrations.IconicFramework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -236,6 +237,9 @@ namespace SpinningWeaponAndToolMod
         private float AbilityReduceStaminaDrainBy { get; set; } = 0;
         private float AbilityIncreaseSpinRadiusBy{ get; set; } = 0;
 
+        //Used with Iconic Framework for spinning
+        private int IconicFrameworkButtonPressCount = 0;
+        private Tool spinningTool;
 
 
         public override void Entry(IModHelper helper)
@@ -255,6 +259,7 @@ namespace SpinningWeaponAndToolMod
        
         private void StopSpinning()
         {
+            spinningTool = null;
             startSpinAnimation = false;
             isSpinning = false;
             Game1.player.FarmerSprite.CurrentFrame = Game1.player.FacingDirection * 12;
@@ -917,6 +922,30 @@ namespace SpinningWeaponAndToolMod
         {
             registerGMCM();
             RegisterUES();
+            RegisterIconicFramework();
+        }
+        private void RegisterIconicFramework()
+        {
+            var iconicFramework = Helper.ModRegistry.GetApi<IIconicFrameworkApi>("furyx639.ToolbarIcons");
+            if (iconicFramework is null)
+            {
+                Monitor.Log("Iconic Framework not found, skipping toolbar icon registration.", LogLevel.Info);
+                return;
+            }
+
+            ITranslationHelper I18n = Helper.Translation;
+
+            iconicFramework.AddToolbarIcon(
+                id: $"{ModManifest.UniqueID}.Spin",
+                texturePath: "Tilesheets/bobbers",
+                    sourceRect: new Rectangle(50, 130, 11, 12), 
+                getTitle: () => I18n.Get("Icon.Spin.name"),
+                getDescription: () => I18n.Get("Icon.Spin.tooltip"),
+                onClick: () => startSpinning(true)
+            );
+
+
+
 
         }
 

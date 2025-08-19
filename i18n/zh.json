@@ -1,26 +1,29 @@
 {
-  
-    "config.mode.name": "游戏模式",
-    "config.mode.tooltip": "Standalone = 模组独立运行，不使用 UnifiedExperienceSystem 进行升级。UnifiedExperience = 若安装并启用该模式，旋转需要先学习相应能力；同时该模式会覆盖体力消耗、半径等配置。",
+  "Icon.Spin.name": "武器或工具旋转能力",
+  "Icon.Spin.tooltip": "点击以切换当前的武器或工具 开/关",
 
-    "gmcm.openMenu.name": "打开菜单",
-    "gmcm.openMenu.tooltip": "打开菜单，为当前选中的工具或武器选择外观，并从任意模组资源中替换当前外观。",
 
-    "ability.SpinningWeapon.name": "旋转武器",
-    "ability.SpinningWeapon.desc": "按住鼠标右键或手柄A键可旋转你的武器或镰刀。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "config.mode.name": "游戏模式",
+  "config.mode.tooltip": "Standalone = 模组独立运行，不使用 UnifiedExperienceSystem 进行升级。UnifiedExperience = 若安装并启用该模式，旋转需要先学习相应能力；同时该模式会覆盖体力消耗、半径等配置。",
 
-    "ability.SpinningAxe.name": "旋转斧头",
-    "ability.SpinningAxe.desc": "按住鼠标右键或手柄A键可旋转你的斧头。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "gmcm.openMenu.name": "打开菜单",
+  "gmcm.openMenu.tooltip": "打开菜单，为当前选中的工具或武器选择外观，并从任意模组资源中替换当前外观。",
 
-    "ability.SpinningPickAxe.name": "旋转镐",
-    "ability.SpinningPickAxe.desc": "按住鼠标右键或手柄A键可旋转你的镐。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "ability.SpinningWeapon.name": "旋转武器",
+  "ability.SpinningWeapon.desc": "按住鼠标右键或手柄A键可旋转你的武器或镰刀。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
 
-    "ability.SpinningWateringCan.name": "旋转浇水壶",
-    "ability.SpinningWateringCan.desc": "按住鼠标右键或手柄A键可旋转你的浇水壶。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "ability.SpinningAxe.name": "旋转斧头",
+  "ability.SpinningAxe.desc": "按住鼠标右键或手柄A键可旋转你的斧头。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
 
-    "ability.SpinningHoe.name": "旋转锄头",
-    "ability.SpinningHoe.desc": "按住鼠标右键或手柄A键可旋转你的锄头。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
-  
+  "ability.SpinningPickAxe.name": "旋转镐",
+  "ability.SpinningPickAxe.desc": "按住鼠标右键或手柄A键可旋转你的镐。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+
+  "ability.SpinningWateringCan.name": "旋转浇水壶",
+  "ability.SpinningWateringCan.desc": "按住鼠标右键或手柄A键可旋转你的浇水壶。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+
+  "ability.SpinningHoe.name": "旋转锄头",
+  "ability.SpinningHoe.desc": "按住鼠标右键或手柄A键可旋转你的锄头。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+
 
 
   "config.description": "选择工具或武器时，右键（可配置的快捷键）进行旋转，如果旋转卡住，左键（可配置的快捷键）。您可以设置基础耐力消耗。耐力消耗会随着技能等级每级减少0.1。例如：战斗等级10级时，使用武器/工具的耐力消耗将减少。",

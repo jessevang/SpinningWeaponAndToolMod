@@ -6,11 +6,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Enchantments;
 using StardewValley.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 
 namespace SpinningWeaponAndToolMod
@@ -39,13 +35,36 @@ namespace SpinningWeaponAndToolMod
             if (!Context.IsWorldReady)
                 return;
 
-            Tool tool = Game1.player.CurrentTool;
+            
+            //IconicFrameworkButtonPressCount = 1 click once, IconicFrameworkButtonPressCount = 2 should mean release button or clicked twice
+            if (usedIconToTrigger == true)
+            {
+                IconicFrameworkButtonPressCount++;
+            }
+
+            if (IconicFrameworkButtonPressCount == 2)
+            {
+                //reset clicks
+                IconicFrameworkButtonPressCount =0;
+                //stop spin
+                if (isSpinning && usedIconToTrigger)
+                {
+                    StopSpinning();
+                }
+
+            }
+            
 
 
-            if ((Config.SpinHotkey.JustPressed()) && tool is not null &&
+
+                Tool tool = Game1.player.CurrentTool;
+
+
+            if ((Config.SpinHotkey.JustPressed()|| usedIconToTrigger) && tool is not null &&
                 (tool is Pickaxe || tool is Axe || tool is WateringCan || tool is Hoe || (tool is MeleeWeapon weapon)))
             {
 
+                spinningTool = tool;
                 //If Unified Experience Mode is turned on and API is registered and reduce config stamina drain
                 if (GoodToRunUnifiedExperienceSystem())
                 {
@@ -170,7 +189,15 @@ namespace SpinningWeaponAndToolMod
                 return;
 
 
-            
+            if (Game1.player.CurrentTool != spinningTool)
+            {
+                if (isSpinning)
+                {
+                    StopSpinning();
+                }
+                return;
+            }
+               
 
 
             //checks for stamina if not enough won't spin or run any additiona code
