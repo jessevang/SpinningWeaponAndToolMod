@@ -60,10 +60,10 @@ namespace SpinningWeaponAndToolMod
                 Tool tool = Game1.player.CurrentTool;
 
 
-            if ((Config.SpinHotkey.JustPressed()|| usedIconToTrigger) && tool is not null &&
+            if ((Config.SpinHotkey.JustPressed()|| (usedIconToTrigger && IconicFrameworkButtonPressCount==1)) && tool is not null &&
                 (tool is Pickaxe || tool is Axe || tool is WateringCan || tool is Hoe || (tool is MeleeWeapon weapon)))
             {
-
+                AbilityReduceStaminaDrainBy = Config.BaseStaminaDrain;
                 spinningTool = tool;
                 //If Unified Experience Mode is turned on and API is registered and reduce config stamina drain
                 if (GoodToRunUnifiedExperienceSystem())
@@ -72,9 +72,9 @@ namespace SpinningWeaponAndToolMod
                     {
                         SpinningPickAxeLevel = uesApi.GetAbilityLevel(ModManifest.UniqueID, "SpinningPickaxe");
                         AbilityReduceStaminaDrainBy = Config.BaseStaminaDrain - ((Config.BaseStaminaDrain * 0.1f) * SpinningPickAxeLevel);
+                        //Monitor.Log($"Config: {Config.BaseStaminaDrain} - Config {Config.BaseStaminaDrain} * float value * {SpinningPickAxeLevel}", LogLevel.Debug);
                         AbilityIncreaseSpinRadiusBy = (int)(SpinningPickAxeLevel / 5);
 
-                        Config.reduceStaminaDrainForPickaxePerLevel = 0;
                         if (SpinningPickAxeLevel > 0)
                             isSpinning = true;
                     }
@@ -201,13 +201,30 @@ namespace SpinningWeaponAndToolMod
 
 
             //checks for stamina if not enough won't spin or run any additiona code
+
+
             staminaDrainCounter++;
-            if (staminaDrainCounter >= 6)
+            if (staminaDrainCounter >= 6 && Config.AbilityUses.Equals("Stamina"))
             {
                 staminaDrainCounter = 0;
                 float staminaCost = Config.BaseStaminaDrain;
 
                 if (Game1.player.Stamina < staminaCost)
+                {
+                    //Monitor.Log("Not enough stamina to continue spinning.", LogLevel.Debug);
+                    StopSpinning();
+                    return;
+                }
+
+            }
+
+            if (staminaDrainCounter >= 6 && Config.AbilityUses.Equals("Energy"))
+            {
+                staminaDrainCounter = 0;
+                float EnergyCost = Config.BaseStaminaDrain;
+                float currentEnergy = uesApi?.GetCurrentEnergy() ?? 0;
+
+                if (currentEnergy < EnergyCost)
                 {
                     //Monitor.Log("Not enough stamina to continue spinning.", LogLevel.Debug);
                     StopSpinning();
@@ -265,7 +282,17 @@ namespace SpinningWeaponAndToolMod
                     playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForWateringCanPerLevel) + Config.wateringcanEnchantEfficient;
                 }
 
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel - AbilityReduceStaminaDrainBy, 0.1f);
+                if (Config.AbilityUses.Equals("Stamina"))
+                    Game1.player.Stamina -= Math.Max(AbilityReduceStaminaDrainBy - playerfarmingLevel, 0.1f);
+
+                if (Config.AbilityUses.Equals("Energy"))
+                {
+                    if (uesApi != null)
+                    {
+                        float energyCost = Math.Max(AbilityReduceStaminaDrainBy - playerfarmingLevel, 0.1f);
+                        bool used = uesApi.TryToUseAbility(energyCost);
+                    }
+                }
             }
 
 
@@ -295,7 +322,20 @@ namespace SpinningWeaponAndToolMod
                 {
                     playerfarmingLevel = (Game1.player.FarmingLevel * Config.reduceStaminaDrainForHoePerLevel) + Config.HoeEnchantEfficient;
                 }
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerfarmingLevel, 0.1f);
+                if (Config.AbilityUses.Equals("Stamina"))
+                    Game1.player.Stamina -= Math.Max(AbilityReduceStaminaDrainBy - playerfarmingLevel, 0.1f);
+                if (Config.AbilityUses.Equals("Energy"))
+                {
+                    if (uesApi != null)
+                    {
+                        float energyCost = Math.Max(AbilityReduceStaminaDrainBy - playerfarmingLevel , 0.1f);
+                        bool used = uesApi.TryToUseAbility(energyCost);
+
+                        
+    
+                    }
+
+                }
 
             }
 
@@ -328,7 +368,18 @@ namespace SpinningWeaponAndToolMod
                 {
                     playerMiningLevel = (Game1.player.MiningLevel * Config.reduceStaminaDrainForPickaxePerLevel) + Config.pickaxeEnchantEfficient;
                 }
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerMiningLevel, 0.1f);
+                if (Config.AbilityUses.Equals("Stamina"))
+                    Game1.player.Stamina -= Math.Max(AbilityReduceStaminaDrainBy - playerMiningLevel, 0.1f);
+                if (Config.AbilityUses.Equals("Energy"))
+                {
+                    if (uesApi != null)
+                    {
+                        float energyCost = Math.Max(AbilityReduceStaminaDrainBy - playerMiningLevel , 0.1f);
+                        bool used = uesApi.TryToUseAbility(energyCost);
+                        //Monitor.Log($"Energy cost: {energyCost} = config: {Config.BaseStaminaDrain} - playerfarminglevel{playerMiningLevel} - AbilityReductionStaminaDrainBy {AbilityReduceStaminaDrainBy}. or 0.1f", LogLevel.Debug);
+                    }
+
+                }
 
             }
 
@@ -357,7 +408,17 @@ namespace SpinningWeaponAndToolMod
                 {
                     playerForgageLevel = (Game1.player.ForagingLevel * Config.reduceStaminaDrainForAxePerLevel) + Config.axeEnchantEfficient;
                 }
-                Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerForgageLevel, 0.1f);
+                if (Config.AbilityUses.Equals("Stamina"))
+                    Game1.player.Stamina -= Math.Max(AbilityReduceStaminaDrainBy - playerForgageLevel, 0.1f);
+                if (Config.AbilityUses.Equals("Energy"))
+                {
+                    if (uesApi != null)
+                    {
+                        float energyCost = Math.Max(AbilityReduceStaminaDrainBy - playerForgageLevel, 0.1f);
+                        bool used = uesApi.TryToUseAbility(energyCost);
+                    }
+
+                }
                 //Console.WriteLine($"playerForgageLevel  *.1: {playerForgageLevel} ");
 
             }
@@ -375,7 +436,7 @@ namespace SpinningWeaponAndToolMod
                     float playerCombatLevel = Game1.player.MiningLevel * Config.reduceStaminaDrainForWeaponsPerLevel;
 
 
-                    Game1.player.Stamina -= Math.Max(Config.BaseStaminaDrain - playerCombatLevel, 0.1f);
+                    Game1.player.Stamina -= Math.Max(AbilityReduceStaminaDrainBy - playerCombatLevel, 0.1f);
                     //Console.WriteLine($"playerCombatLevel  *.1: {playerCombatLevel} ");
                 }
 

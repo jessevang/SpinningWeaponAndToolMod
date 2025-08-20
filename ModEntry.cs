@@ -20,6 +20,7 @@ namespace SpinningWeaponAndToolMod
     {
         //Mode
         public string Mode { get; set; } = "UnifiedExperience";
+        public string AbilityUses { get; set; } = "Energy";
 
         //hotkeys
         public KeybindList SpinHotkey { get; set; } = new(
@@ -33,7 +34,7 @@ namespace SpinningWeaponAndToolMod
         );
 
         //all tool and weapons
-        public float BaseStaminaDrain { get; set; } = 3.0f;
+        public float BaseStaminaDrain { get; set; } = .0f;
         public float reduceStaminaDrainForWeaponsPerLevel { get; set; } = 0.0f;
         public int numberOfSpinningSprite { get; set; } = 5;
 
@@ -51,7 +52,7 @@ namespace SpinningWeaponAndToolMod
         
         //axe
         public int axeSpinRadius { get; set; } = 1;
-        public float axeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public float axeSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 0.0f;
         public int numberOfAxeSpinHitsPerSecond { get; set; } = 3;
         public float axeEnchantEfficient { get; set; } = 0f;
         public int axeEnchantSwift { get; set; } = 0;
@@ -68,7 +69,7 @@ namespace SpinningWeaponAndToolMod
 
         //watering can
         public float reduceStaminaDrainForWateringCanPerLevel { get; set; } = 0.0f;
-        public float wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 1.0f;
+        public float wateringcanSpinRadiusIncreaseByEachToolUpgradeLevel { get; set; } = 0.0f;
         public int wateringcanRadius { get; set; } = 1;
         public float wateringcanEnchantEfficient { get; set; } = 0f;
         public float wateringcanEnchantReaching { get; set; } = 0f;
@@ -260,6 +261,7 @@ namespace SpinningWeaponAndToolMod
         private void StopSpinning()
         {
             spinningTool = null;
+            IconicFrameworkButtonPressCount = 0;
             startSpinAnimation = false;
             isSpinning = false;
             Game1.player.FarmerSprite.CurrentFrame = Game1.player.FacingDirection * 12;
@@ -1056,8 +1058,20 @@ namespace SpinningWeaponAndToolMod
                 allowedValues: new[] { "Standalone", "UnifiedExperience" }
             );
 
+            gmcm.AddTextOption(
+                mod: ModManifest,
+                name: () => i18n.Get("config.AbilityUses.name"),
+                tooltip: () => i18n.Get("config.AbilityUses.tooltip"),
+                getValue: () => Config.AbilityUses,
+                setValue: value => Config.AbilityUses = value,
+                allowedValues: new[] { "Energy", "Stamina" }
+            );
 
-            gmcm.AddKeybindList(
+
+
+
+
+        gmcm.AddKeybindList(
                 ModManifest,
                 name: () => i18n.Get("hotkeys.spin.name"),
                 tooltip: () => i18n.Get("hotkeys.spin.tooltip"),
