@@ -224,7 +224,7 @@ namespace SpinningWeaponAndToolMod
                 float EnergyCost = AbilityReduceStaminaDrainBy;
                 float currentEnergy = uesApi?.GetCurrentEnergy() ?? 0;
 
-                if (currentEnergy < EnergyCost)
+                if (currentEnergy <= EnergyCost|| currentEnergy <2)
                 {
                     //Monitor.Log("Not enough stamina to continue spinning.", LogLevel.Debug);
                     StopSpinning();

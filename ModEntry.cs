@@ -34,9 +34,11 @@ namespace SpinningWeaponAndToolMod
         );
 
         //all tool and weapons
-        public float BaseStaminaDrain { get; set; } = .0f;
+        public float BaseStaminaDrain { get; set; } = 3.0f;
         public float reduceStaminaDrainForWeaponsPerLevel { get; set; } = 0.0f;
         public int numberOfSpinningSprite { get; set; } = 5;
+        
+
 
         //weapons
         public int weaponSpinRadius { get; set; } = 1;
@@ -225,6 +227,9 @@ namespace SpinningWeaponAndToolMod
         private ModConfig Config;
         private string lastItemKey = null;
 
+  
+
+
 
         //API Levels
         private int SpinningWeaponLevel;
@@ -249,12 +254,22 @@ namespace SpinningWeaponAndToolMod
             this.i18n = helper.Translation;
             Instance = this;
             Config = helper.ReadConfig<ModConfig>();
+
+
             var harmony = new Harmony(ModManifest.UniqueID);
-            harmony.PatchAll(); // Automatically applies all [HarmonyPatch] classes in your mod
+            harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.drawObjectDialogue), new[] { typeof(string) }),
+                prefix: new HarmonyMethod(typeof(Patches.DrawObjectDialoguePatch), nameof(Patches.DrawObjectDialoguePatch.Prefix))
+            );
+            harmony.PatchAll();
             helper.Events.Input.ButtonPressed += OnButtonPressed;
             helper.Events.Input.ButtonReleased += OnButtonReleased;
             helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
             helper.Events.GameLoop.GameLaunched += OnGameLaunched;
+
+            //used to rebuild dialogue in case text is localized from i18n translations.
+            helper.Events.GameLoop.DayStarted += (_, __) => Patches.DrawObjectDialoguePatch.RebuildBlockedDialogues();
+            LocalizedContentManager.OnLanguageChange += _ => Patches.DrawObjectDialoguePatch.RebuildBlockedDialogues();
         }
 
        
@@ -1099,7 +1114,7 @@ namespace SpinningWeaponAndToolMod
                 name: () => i18n.Get("weapons_tools.stamina_drain.name"),
                 tooltip: () => i18n.Get("weapons_tools.stamina_drain.tooltip"),
                 min: 0.0f,
-                max: 10.0f,
+                max: 25.0f,
                 interval: 0.1f
             );
 
