@@ -975,30 +975,62 @@ namespace SpinningWeaponAndToolMod
                 return;
             }
 
+            /*
             uesApi.RegisterAbility(
                  modUniqueId: this.ModManifest.UniqueID,
                  abilityId: "SpinningWeapon",
                  displayName: Helper.Translation.Get("ability.SpinningWeapon.name"),
                  description: Helper.Translation.Get("ability.SpinningWeapon.desc"),
                  curveKind: "step",
-                 curveData: new Dictionary<string, object> { 
-                     { "base", 100 },
-                     { "step", 100 } 
+                 curveData: new Dictionary<string, object> {
+                    { "base", 100 },
+                    { "step", 100 }
                  },
-                 maxLevel: 10
+                 maxLevel: 10,
+                 iconPath: "TileSheets/weapons",
+                 iconSourceRect: new Rectangle(48, 0, 16, 16), // Sword icon
+                 tags: new[] { "combat", "weapon" }
              );
+
+            */
+            Texture2D weaponsTex = Game1.content.Load<Texture2D>("TileSheets/weapons");
+            uesApi.RegisterAbility(
+                modUniqueId: this.ModManifest.UniqueID,
+                abilityId: "SpinningWeapon",
+                displayName: Helper.Translation.Get("ability.SpinningWeapon.name"),
+                description: Helper.Translation.Get("ability.SpinningWeapon.desc"),
+                curveKind: "step",
+                curveData: new Dictionary<string, object> {
+                    { "base", 100 },
+                    { "step", 100 }
+                },
+                maxLevel: 10,
+
+                // pass actual Texture2D + source rectangle
+                iconTexture: weaponsTex,
+                iconSourceRect: new Rectangle(48, 0, 16, 16), // Sword icon
+
+                // path is optional when you supply a texture
+                iconPath: null,
+                tags: new[] { "combat", "weapon" }
+            );
+
+
 
             uesApi.RegisterAbility(
                 modUniqueId: this.ModManifest.UniqueID,
                 abilityId: "SpinningAxe",
                 displayName: Helper.Translation.Get("ability.SpinningAxe.name"),
                 description: Helper.Translation.Get("ability.SpinningAxe.desc"),
-                 curveKind: "step",
-                 curveData: new Dictionary<string, object> {
-                     { "base", 100 },
-                     { "step", 100 }
-                 },
-                 maxLevel: 10
+                curveKind: "step",
+                curveData: new Dictionary<string, object> {
+                    { "base", 100 },
+                    { "step", 100 }
+                },
+                maxLevel: 10,
+                iconPath: "TileSheets/tools",
+                iconSourceRect: new Rectangle(80, 192, 16, 16), // Axe icon
+                tags: new[] { "foraging", "axe" }
             );
 
             uesApi.RegisterAbility(
@@ -1006,12 +1038,15 @@ namespace SpinningWeaponAndToolMod
                 abilityId: "SpinningPickAxe",
                 displayName: Helper.Translation.Get("ability.SpinningPickAxe.name"),
                 description: Helper.Translation.Get("ability.SpinningPickAxe.desc"),
-                 curveKind: "step",
-                 curveData: new Dictionary<string, object> {
-                     { "base", 100 },
-                     { "step", 100 }
-                 },
-                 maxLevel: 10
+                curveKind: "step",
+                curveData: new Dictionary<string, object> {
+                    { "base", 100 },
+                    { "step", 100 }
+                },
+                maxLevel: 10,
+                iconPath: "TileSheets/tools",
+                iconSourceRect: new Rectangle(193, 96, 16, 16), // Pickaxe icon
+                tags: new[] { "mining", "pickaxe" }
             );
 
             uesApi.RegisterAbility(
@@ -1019,12 +1054,15 @@ namespace SpinningWeaponAndToolMod
                 abilityId: "SpinningWateringCan",
                 displayName: Helper.Translation.Get("ability.SpinningWateringCan.name"),
                 description: Helper.Translation.Get("ability.SpinningWateringCan.desc"),
-                 curveKind: "step",
-                 curveData: new Dictionary<string, object> {
-                     { "base", 100 },
-                     { "step", 100 }
-                 },
-                 maxLevel: 10
+                curveKind: "step",
+                curveData: new Dictionary<string, object> {
+                    { "base", 100 },
+                    { "step", 100 }
+                },
+                maxLevel: 10,
+                iconPath: "TileSheets/tools",
+                iconSourceRect: new Rectangle(161, 226, 16, 13), // Watering can icon
+                tags: new[] { "farming", "watering" }
             );
 
             uesApi.RegisterAbility(
@@ -1032,13 +1070,18 @@ namespace SpinningWeaponAndToolMod
                 abilityId: "SpinningHoe",
                 displayName: Helper.Translation.Get("ability.SpinningHoe.name"),
                 description: Helper.Translation.Get("ability.SpinningHoe.desc"),
-                 curveKind: "step",
-                 curveData: new Dictionary<string, object> {
-                     { "base", 100 },
-                     { "step", 100 }
-                 },
-                 maxLevel: 10
+                curveKind: "step",
+                curveData: new Dictionary<string, object> {
+                    { "base", 100 },
+                    { "step", 100 }
+                },
+                maxLevel: 10,
+                iconPath: "TileSheets/tools",
+                iconSourceRect: new Rectangle(193, 34, 16, 16), // Hoe icon
+                tags: new[] { "farming", "hoe" }
             );
+
+
 
 
         }
