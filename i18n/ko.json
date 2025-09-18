@@ -2,6 +2,9 @@
   "Icon.Spin.name": "무기/도구 회전 능력",
   "Icon.Spin.tooltip": "클릭하여 현재 무기 또는 도구를 켜기/끄기",
 
+  "minStaminaDrain.name": "최소 스태미나 소모",
+  "minStaminaDrain.tooltip": "스핀마다 소모되는 최소 스태미나/에너지입니다. 무한 회전을 방지합니다. 0으로 설정하면 무한 회전이 가능합니다.",
+
 
   "config.mode.name": "게임 모드",
   "config.mode.tooltip": "Standalone = 이 모드는 단독으로 동작하며 레벨업에 UnifiedExperienceSystem을 사용하지 않습니다. UnifiedExperience = 이 모드에서 Unified Experience System 모드가 설치되어 있으면, 회전을 사용하려면 능력을 배워야 하며 스태미나 소모와 반경 등 설정이 이 모드에서 덮어씁니다.",
@@ -10,19 +13,19 @@
   "gmcm.openMenu.tooltip": "선택한 도구 또는 무기의 스킨을 고르는 메뉴를 열고, 설치된 모드의 에셋에서 현재 외형을 교체합니다.",
 
   "ability.SpinningWeapon.name": "회전 무기",
-  "ability.SpinningWeapon.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 무기나 낫을 회전합니다.\n매 레벨: 스태미나 소모 10% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
+  "ability.SpinningWeapon.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 무기나 낫을 회전합니다.\n매 레벨: 스태미나 소모 5% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
 
   "ability.SpinningAxe.name": "회전 도끼",
-  "ability.SpinningAxe.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 도끼를 회전합니다.\n매 레벨: 스태미나 소모 10% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다。\n5레벨마다: 회전 반경 +1.",
+  "ability.SpinningAxe.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 도끼를 회전합니다.\n매 레벨: 스태미나 소모 5% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다。\n5레벨마다: 회전 반경 +1.",
 
   "ability.SpinningPickAxe.name": "회전 곡괭이",
-  "ability.SpinningPickAxe.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 곡괭이를 회전합니다.\n매 레벨: 스태미나 소모 10% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
+  "ability.SpinningPickAxe.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 곡괭이를 회전합니다.\n매 레벨: 스태미나 소모 5% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
 
   "ability.SpinningWateringCan.name": "회전 물뿌리개",
-  "ability.SpinningWateringCan.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 물뿌리개를 회전합니다.\n매 레벨: 스태미나 소모 10% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
+  "ability.SpinningWateringCan.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 물뿌리개를 회전합니다.\n매 레벨: 스태미나 소모 5% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
 
   "ability.SpinningHoe.name": "회전 괭이",
-  "ability.SpinningHoe.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 괭이를 회전합니다.\n매 레벨: 스태미나 소모 10% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
+  "ability.SpinningHoe.desc": "마우스 오른쪽 버튼 또는 컨트롤러 A 버튼을 길게 눌러 괭이를 회전합니다.\n매 레벨: 스태미나 소모 5% 감소. 최대 레벨에서도 소량의 스태미나는 소모됩니다.\n5레벨마다: 회전 반경 +1.",
 
 
   "config.description": "도구나 무기를 선택한 상태에서 오른쪽 클릭({hotkey configurable})으로 회전을 사용하고, 회전이 멈추면 왼쪽 클릭({hotkey configurable})으로 다시 시도하세요. 기본 스태미나 소모량을 설정할 수 있습니다. 스킬 레벨당 스태미나 소모가 0.1씩 감소합니다. 예: 전투 레벨 10이면 무기/도구 사용 시 스태미나 소모가 줄어듭니다.",

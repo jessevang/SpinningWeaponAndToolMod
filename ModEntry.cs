@@ -34,7 +34,9 @@ namespace SpinningWeaponAndToolMod
         );
 
         //all tool and weapons
-        public float BaseStaminaDrain { get; set; } = 3.0f;
+        public float BaseStaminaDrain { get; set; } = 25.0f;
+
+        public float MinStaminaDrain { get; set; } = 10.0f;
         public float reduceStaminaDrainForWeaponsPerLevel { get; set; } = 0.0f;
         public int numberOfSpinningSprite { get; set; } = 5;
         
@@ -404,7 +406,7 @@ namespace SpinningWeaponAndToolMod
                             break;
 
                         default:
-                            Game1.playSound("swordswipe");  //mainly for Scythe
+                            Game1.playSound("swordswipe");
                           
                             ApplyWeaponEffect(weapon, center, (int)AbilityIncreaseSpinRadiusBy + Config.weaponSpinRadius + (int)(Game1.player.CombatLevel * Config.weaponSpinRadiusPerCombatLevel));
                             
@@ -993,6 +995,7 @@ namespace SpinningWeaponAndToolMod
              );
 
             */
+
             Texture2D weaponsTex = Game1.content.Load<Texture2D>("TileSheets/weapons");
             uesApi.RegisterAbility(
                 modUniqueId: this.ModManifest.UniqueID,
@@ -1002,9 +1005,9 @@ namespace SpinningWeaponAndToolMod
                 curveKind: "step",
                 curveData: new Dictionary<string, object> {
                     { "base", 100 },
-                    { "step", 100 }
+                    { "step", 300 }
                 },
-                maxLevel: 10,
+                maxLevel: 25,
 
                 // pass actual Texture2D + source rectangle
                 iconTexture: weaponsTex,
@@ -1025,9 +1028,9 @@ namespace SpinningWeaponAndToolMod
                 curveKind: "step",
                 curveData: new Dictionary<string, object> {
                     { "base", 100 },
-                    { "step", 100 }
+                    { "step", 300 }
                 },
-                maxLevel: 10,
+                maxLevel: 25,
                 iconPath: "TileSheets/tools",
                 iconSourceRect: new Rectangle(80, 192, 16, 16), // Axe icon
                 tags: new[] { "foraging", "axe" }
@@ -1041,9 +1044,9 @@ namespace SpinningWeaponAndToolMod
                 curveKind: "step",
                 curveData: new Dictionary<string, object> {
                     { "base", 100 },
-                    { "step", 100 }
+                    { "step", 300 }
                 },
-                maxLevel: 10,
+                maxLevel: 25,
                 iconPath: "TileSheets/tools",
                 iconSourceRect: new Rectangle(193, 96, 16, 16), // Pickaxe icon
                 tags: new[] { "mining", "pickaxe" }
@@ -1057,9 +1060,9 @@ namespace SpinningWeaponAndToolMod
                 curveKind: "step",
                 curveData: new Dictionary<string, object> {
                     { "base", 100 },
-                    { "step", 100 }
+                    { "step", 300 }
                 },
-                maxLevel: 10,
+                maxLevel: 25,
                 iconPath: "TileSheets/tools",
                 iconSourceRect: new Rectangle(161, 226, 16, 13), // Watering can icon
                 tags: new[] { "farming", "watering" }
@@ -1073,9 +1076,9 @@ namespace SpinningWeaponAndToolMod
                 curveKind: "step",
                 curveData: new Dictionary<string, object> {
                     { "base", 100 },
-                    { "step", 100 }
+                    { "step", 300 }
                 },
-                maxLevel: 10,
+                maxLevel: 25,
                 iconPath: "TileSheets/tools",
                 iconSourceRect: new Rectangle(193, 34, 16, 16), // Hoe icon
                 tags: new[] { "farming", "hoe" }
@@ -1127,9 +1130,21 @@ namespace SpinningWeaponAndToolMod
 
 
 
+            gmcm.AddNumberOption(
+                mod: ModManifest,
+                name: () => Helper.Translation.Get("minStaminaDrain.name"),
+                tooltip: () => Helper.Translation.Get("minStaminaDrain.tooltip"),
+                getValue: () => Config.MinStaminaDrain,
+                setValue: v => Config.MinStaminaDrain = v,
+                min: 0f,
+                max: 25f,
+                interval: 0.1f
+            );
 
 
-        gmcm.AddKeybindList(
+
+
+            gmcm.AddKeybindList(
                 ModManifest,
                 name: () => i18n.Get("hotkeys.spin.name"),
                 tooltip: () => i18n.Get("hotkeys.spin.tooltip"),

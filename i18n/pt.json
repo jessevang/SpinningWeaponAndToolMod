@@ -2,6 +2,9 @@
   "Icon.Spin.name": "Habilidade de Girar Arma ou Ferramenta",
   "Icon.Spin.tooltip": "Clique para ativar/desativar sua Arma ou Ferramenta atual",
 
+  "minStaminaDrain.name": "Dreno Mínimo de Energia",
+  "minStaminaDrain.tooltip": "A energia/estamina mínima consumida por giro. Evita rotação infinita. Defina como 0 para Giro Infinito.",
+
 
   "config.mode.name": "Modo de jogo",
   "config.mode.tooltip": "Standalone = O mod funciona sozinho e não usa o UnifiedExperienceSystem para níveis. UnifiedExperience = Se o mod Unified Experience System estiver instalado nesse modo, girar exigirá aprender a habilidade e este modo também substitui opções como consumo de energia e raio.",
@@ -10,19 +13,19 @@
   "gmcm.openMenu.tooltip": "Abre um menu para escolher uma skin para a ferramenta ou arma selecionada e substituir a aparência atual por recursos de mods.",
 
   "ability.SpinningWeapon.name": "Armas giratórias",
-  "ability.SpinningWeapon.desc": "Segure o botão direito do mouse ou o botão A do controle para girar sua arma ou foice.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
+  "ability.SpinningWeapon.desc": "Segure o botão direito do mouse ou o botão A do controle para girar sua arma ou foice.\nA cada nível: reduz o consumo de energia em 5%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
 
   "ability.SpinningAxe.name": "Machado giratório",
-  "ability.SpinningAxe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar o machado.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
+  "ability.SpinningAxe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar o machado.\nA cada nível: reduz o consumo de energia em 5%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
 
   "ability.SpinningPickAxe.name": "Picareta giratória",
-  "ability.SpinningPickAxe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar a picareta.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
+  "ability.SpinningPickAxe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar a picareta.\nA cada nível: reduz o consumo de energia em 5%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
 
   "ability.SpinningWateringCan.name": "Regador giratório",
-  "ability.SpinningWateringCan.desc": "Segure o botão direito do mouse ou o botão A do controle para girar o regador.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
+  "ability.SpinningWateringCan.desc": "Segure o botão direito do mouse ou o botão A do controle para girar o regador.\nA cada nível: reduz o consumo de energia em 5%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
 
   "ability.SpinningHoe.name": "Enxada giratória",
-  "ability.SpinningHoe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar a enxada.\nA cada nível: reduz o consumo de energia em 10%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
+  "ability.SpinningHoe.desc": "Segure o botão direito do mouse ou o botão A do controle para girar a enxada.\nA cada nível: reduz o consumo de energia em 5%. Mesmo no nível máximo, ainda há um pequeno gasto de energia.\nA cada 5 níveis: raio de giro +1.",
 
 
   "config.description": "Ao selecionar uma ferramenta ou arma, clique com o botão direito ({hotkey configurable}) para girar, e com o botão esquerdo ({hotkey configurable}) se o giro travar. Você pode definir o consumo base de energia. O consumo de energia é reduzido em 0,1 por nível de habilidade. Exemplo: nível 10 de combate reduzirá o consumo ao usar armas/ferramentas.",

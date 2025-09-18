@@ -2,6 +2,9 @@
   "Icon.Spin.name": "武器或工具旋转能力",
   "Icon.Spin.tooltip": "点击以切换当前的武器或工具 开/关",
 
+  "minStaminaDrain.name": "最小体力消耗",
+  "minStaminaDrain.tooltip": "每次旋转消耗的最小体力/能量。防止无限旋转。设置为 0 则为无限旋转。",
+
 
   "config.mode.name": "游戏模式",
   "config.mode.tooltip": "Standalone = 模组独立运行，不使用 UnifiedExperienceSystem 进行升级。UnifiedExperience = 若安装并启用该模式，旋转需要先学习相应能力；同时该模式会覆盖体力消耗、半径等配置。",
@@ -10,19 +13,19 @@
   "gmcm.openMenu.tooltip": "打开菜单，为当前选中的工具或武器选择外观，并从任意模组资源中替换当前外观。",
 
   "ability.SpinningWeapon.name": "旋转武器",
-  "ability.SpinningWeapon.desc": "按住鼠标右键或手柄A键可旋转你的武器或镰刀。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "ability.SpinningWeapon.desc": "按住鼠标右键或手柄A键可旋转你的武器或镰刀。\n每级：体力消耗减少5%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
 
   "ability.SpinningAxe.name": "旋转斧头",
-  "ability.SpinningAxe.desc": "按住鼠标右键或手柄A键可旋转你的斧头。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "ability.SpinningAxe.desc": "按住鼠标右键或手柄A键可旋转你的斧头。\n每级：体力消耗减少5%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
 
   "ability.SpinningPickAxe.name": "旋转镐",
-  "ability.SpinningPickAxe.desc": "按住鼠标右键或手柄A键可旋转你的镐。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "ability.SpinningPickAxe.desc": "按住鼠标右键或手柄A键可旋转你的镐。\n每级：体力消耗减少5%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
 
   "ability.SpinningWateringCan.name": "旋转浇水壶",
-  "ability.SpinningWateringCan.desc": "按住鼠标右键或手柄A键可旋转你的浇水壶。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "ability.SpinningWateringCan.desc": "按住鼠标右键或手柄A键可旋转你的浇水壶。\n每级：体力消耗减少5%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
 
   "ability.SpinningHoe.name": "旋转锄头",
-  "ability.SpinningHoe.desc": "按住鼠标右键或手柄A键可旋转你的锄头。\n每级：体力消耗减少10%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
+  "ability.SpinningHoe.desc": "按住鼠标右键或手柄A键可旋转你的锄头。\n每级：体力消耗减少5%。即使满级仍会消耗少量体力。\n每5级：旋转半径+1。",
 
 
 
